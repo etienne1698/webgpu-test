@@ -9,7 +9,7 @@ const canvas: HTMLCanvasElement = document.querySelector("#app-canvas")!;
 const t0 = mat4.create();
 
 const t1 = mat4.create();
-mat4.translate(t1, t1, [1, 1, 0]);
+mat4.translate(t1, t1, [.5, .5, 0]);
 
 const scene = new Scene(
   new Map([

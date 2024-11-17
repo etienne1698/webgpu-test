@@ -8,6 +8,16 @@ export class Renderer {
   pipeline!: GPURenderPipeline;
   uniformBuffer!: GPUBuffer;
   bindGroup!: GPUBindGroup;
+  vertexBufferLayout = {
+    arrayStride: 8,
+    attributes: [
+      {
+        format: "float32x2" as GPUVertexFormat,
+        offset: 0,
+        shaderLocation: 0, // Position. Matches @location(0) in the @vertex shader.
+      },
+    ],
+  };
 
   constructor(public canvas: HTMLCanvasElement, public scene: Scene) {
     this.canvas = canvas;
@@ -79,18 +89,7 @@ export class Renderer {
       vertex: {
         module: shaderModule,
         entryPoint: "main",
-        buffers: [
-          {
-            arrayStride: 8,
-            attributes: [
-              {
-                format: "float32x2",
-                offset: 0,
-                shaderLocation: 0, // Position. Matches @location(0) in the @vertex shader.
-              },
-            ],
-          },
-        ],
+        buffers: [this.vertexBufferLayout],
       },
       fragment: {
         module: shaderModule,
@@ -123,6 +122,7 @@ export class Renderer {
 
   async render() {
     const encoder = this.device.createCommandEncoder();
+
     const pass = encoder.beginRenderPass({
       colorAttachments: [
         {
@@ -133,35 +133,28 @@ export class Renderer {
         },
       ],
     });
-    pass.end();
-    for (const block of this.scene.blocks.values()) {
-      for (const mesh of block.meshes) {
-        await mesh.init(this.device);
-        const pass = encoder.beginRenderPass({
-          colorAttachments: [
-            {
-              view: this.context.getCurrentTexture().createView(),
-              loadOp: "load",
-              clearValue: { r: 0, g: 0, b: 0.4, a: 1.0 },
-              storeOp: "store",
-            },
-          ],
-        });
-        pass.setPipeline(this.pipeline);
-        pass.setVertexBuffer(0, mesh.vertexBuffer);
-        this.device.queue.writeBuffer(mesh.vertexBuffer, 0, mesh.vertices);
+    pass.setPipeline(this.pipeline);
 
-        pass.setBindGroup(0, this.bindGroup);
+    pass.setBindGroup(0, this.bindGroup);
+
+    for (const block of this.scene.blocks.values()) {
+      for (const mesh of block.meshes.values()) {
+        await mesh.init(this.device);
+        console.error({ mesh });
         this.device.queue.writeBuffer(
           this.uniformBuffer,
           0,
           new Float32Array(mesh.transform)
         );
 
+        pass.setVertexBuffer(0, mesh.vertexBuffer);
+        this.device.queue.writeBuffer(mesh.vertexBuffer, 0, mesh.vertices);
+
         pass.draw(mesh.vertices.length / 2);
-        pass.end();
       }
     }
+
+    pass.end();
 
     this.device.queue.submit([encoder.finish()]);
   }
