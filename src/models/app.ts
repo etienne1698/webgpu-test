@@ -1,7 +1,7 @@
-import { Camera } from "./models/camera";
-import { Control } from "./models/control";
-import { Scene } from "./models/scene";
-import { Renderer } from "./view/renderer";
+import { Camera } from "./camera";
+import { Control } from "./control";
+import { Scene } from "./scene";
+import { Renderer } from "../view/renderer";
 
 export type AppProps = {
   controls?: Control[];

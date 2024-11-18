@@ -9,7 +9,8 @@ export class KeyboardMove extends Control {
     left: false,
     right: false,
     ctrl: false,
-    equal: false,
+    P: false,
+    M: false,
   };
   keybinding = {
     top: "ArrowUp",
@@ -17,7 +18,8 @@ export class KeyboardMove extends Control {
     left: "ArrowLeft",
     right: "ArrowRight",
     ctrl: "ControlLeft",
-    equal: "Equal",
+    P: "KeyP",
+    M: "Semicolon",
   };
 
   handleKeyDown(e: KeyboardEvent) {
@@ -37,8 +39,11 @@ export class KeyboardMove extends Control {
       case this.keybinding.ctrl:
         this.keypressed.ctrl = true;
         break;
-      case this.keybinding.equal:
-        this.keypressed.equal = true;
+      case this.keybinding.P:
+        this.keypressed.P = true;
+        break;
+      case this.keybinding.M:
+        this.keypressed.M = true;
         break;
       default:
         break;
@@ -61,8 +66,11 @@ export class KeyboardMove extends Control {
       case this.keybinding.ctrl:
         this.keypressed.ctrl = false;
         break;
-      case this.keybinding.equal:
-        this.keypressed.equal = false;
+      case this.keybinding.P:
+        this.keypressed.P = false;
+        break;
+      case this.keybinding.M:
+        this.keypressed.M = false;
         break;
       default:
         break;
@@ -75,6 +83,8 @@ export class KeyboardMove extends Control {
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
     window.addEventListener("keyup", this.handleKeyUp.bind(this));
   }
+
+  async destroy() {}
 
   update(): void {
     if (this.keypressed.top) {
@@ -89,12 +99,14 @@ export class KeyboardMove extends Control {
     if (this.keypressed.left) {
       this.camera.translate([-0.01, 0, 0]);
     }
-    if (this.keypressed.ctrl && this.keypressed.equal) {
+
+    
+    if (this.keypressed.P) {
+      this.camera.translate([0, 0, 0.01]);
+    }
+    if (this.keypressed.M) {
       this.camera.translate([0, 0, -0.01]);
     }
-  }
 
-  destroy(): Promise<void> {
-    throw new Error("Method not implemented.");
   }
 }

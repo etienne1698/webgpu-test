@@ -1,5 +1,5 @@
-import { App } from "./app";
 import { KeyboardMove } from "./controls/keyboard_move";
+import { App } from "./models/app";
 import { Block } from "./models/block";
 import { Scene } from "./models/scene";
 import { SquareMesh } from "./view/meshes/square_mesh";
