@@ -156,7 +156,7 @@ export class Renderer {
         const vertices = mesh.vertices.map((v) => [v[0], v[1], v[2]]).flat(); // Transformer en tableau plat [x, y, z, ...]
         const vertexBuffer = this.device.createBuffer({
           label: "Mesh vertices",
-          size: 4 * vertices.length, // Taille du buffer (nombre de floats * taille float)
+          size: 4 * vertices.length + 4 * 3, // Taille du buffer (taille float * nombre de floats)
           usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
         });
 
@@ -164,6 +164,11 @@ export class Renderer {
           vertexBuffer,
           0,
           new Float32Array(vertices)
+        );
+        this.device.queue.writeBuffer(
+          vertexBuffer,
+          vertices.length * 4,
+          new Float32Array([1, 1, 1])
         );
         pass.setVertexBuffer(0, vertexBuffer);
 

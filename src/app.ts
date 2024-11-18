@@ -1,0 +1,40 @@
+import { Control } from "./models/control";
+import { Scene } from "./models/scene";
+import { Renderer } from "./view/renderer";
+
+export type AppProps = {
+  controls?: Control[];
+  scene: Scene;
+  canvas: HTMLCanvasElement;
+};
+
+export class App {
+  controls: Control[] = [];
+  scene!: Scene;
+  canvas!: HTMLCanvasElement;
+
+  private renderer!: Renderer;
+
+  constructor(props: AppProps) {
+    Object.assign(this, props);
+
+    this.renderer = new Renderer(this.canvas, this.scene);
+
+    this.init = this.init.bind(this);
+    this.run = this.run.bind(this);
+  }
+
+  async init() {
+    for (const control of this.controls) {
+      control.init(this.scene);
+    }
+    await this.renderer.init();
+    this.run();
+  }
+
+  run() {
+    this.controls.forEach((control) => control.update());
+    this.renderer.render();
+    requestAnimationFrame(this.run);
+  }
+}

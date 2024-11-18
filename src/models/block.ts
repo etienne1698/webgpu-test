@@ -7,8 +7,8 @@ export class Block {
   }
 
   translate(vector: vec3) {
-    this.meshes.forEach((mesh) => {
+    for (const mesh of this.meshes) {
       mesh.translate(vector);
-    });
+    }
   }
 }

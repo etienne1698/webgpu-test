@@ -1,13 +1,13 @@
-import { mat4 } from "gl-matrix";
+import { App } from "./app";
+import { KeyboardMove } from "./controls/keyboard_move";
 import { Block } from "./models/block";
 import { Scene } from "./models/scene";
 import { SquareMesh } from "./view/meshes/square_mesh";
-import { Renderer } from "./view/renderer";
 
 const canvas: HTMLCanvasElement = document.querySelector("#app-canvas")!;
 
 const square1 = new Block([new SquareMesh([0, 0, 0])]);
-const square2 = new Block([new SquareMesh([.25, .25, 0])]);
+const square2 = new Block([new SquareMesh([0.25, 0.25, 0])]);
 
 square1.translate([-0.25, -0.25, 1]);
 
@@ -18,9 +18,10 @@ const scene = new Scene(
   ])
 );
 
-const renderer = new Renderer(canvas, scene);
+const app = new App({
+  scene,
+  canvas,
+  controls: [new KeyboardMove()],
+});
 
-await renderer.init();
-
-renderer.render();
-
+app.init();
