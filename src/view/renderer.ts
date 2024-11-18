@@ -125,7 +125,7 @@ export class Renderer {
         });
 
         const cameraPosBuffer = this.device.createBuffer({
-          size: 4 * 3,
+          size: 64,
           usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
         });
 
@@ -158,7 +158,7 @@ export class Renderer {
         this.device.queue.writeBuffer(
           cameraPosBuffer,
           0,
-          new Float32Array(camera.position)
+          new Float32Array(camera.viewProjectionMatrix)
         );
 
         const vertices = mesh.vertices.map((v) => [v[0], v[1], v[2]]).flat(); // Transformer en tableau plat [x, y, z, ...]

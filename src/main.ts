@@ -8,18 +8,16 @@ import { SquareMesh } from "./view/meshes/square_mesh";
 const canvas: HTMLCanvasElement = document.querySelector("#app-canvas")!;
 
 const scene = new Scene(
-  new Map([
-    ["square1", new Block([new SquareMesh([0, 0, 0])])],
-    //["square2", new Block([new SquareMesh([0.25, 0.25, 1])])],
-  ])
+  new Map([["square1", new Block([new SquareMesh([0, 0, 0])])]])
 );
 
-scene.getBlock("square1")!.scale(.5)
-
-const s2 = scene.getBlock("square2");
-if (s2) {
-  s2.rotateZ(degeesToRadiant(-45));
-}
+let rotateZ = 0;
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Enter") {
+    rotateZ += 45;
+    scene.getBlock("square1")!.rotateZ(degeesToRadiant(rotateZ));
+  }
+});
 
 const app = new App({
   scene,
