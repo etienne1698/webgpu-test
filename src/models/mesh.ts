@@ -1,12 +1,14 @@
-import { mat4 } from "gl-matrix";
+import { mat4, vec3 } from "gl-matrix";
 
 export abstract class Mesh {
-  abstract vertexBuffer: GPUBuffer;
-  abstract vertices: Float32Array;
+  abstract vertices: vec3[];
+  transform = mat4.create();
 
-  constructor(public transform: mat4 = mat4.create()) {
-    this.transform = transform;
+  constructor(position: vec3) {
+    this.translate(position);
   }
 
-  abstract init(device: GPUDevice): Promise<void>;
+  translate(vector: vec3) {
+    mat4.translate(this.transform, this.transform, vector);
+  }
 }

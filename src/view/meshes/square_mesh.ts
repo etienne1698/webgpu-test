@@ -1,19 +1,14 @@
+import { vec3 } from "gl-matrix";
 import { Mesh } from "../../models/mesh";
 
 export class SquareMesh extends Mesh {
-  vertexBuffer!: GPUBuffer;
-  vertices = new Float32Array([
-    -0.4, -0.4, 0.4, -0.4, 0.4, 0.4,
-
-    -0.4, -0.4, 0.4, 0.4, -0.4, 0.4,
-  ]);
+  vertices: vec3[] = [
+    [-0.5, -0.5, 0], // top left
+    [0.5, -0.5, 0], // bottom left
+    [0.5, 0.5, 0], // bottom right
+    [-0.5, -0.5, 0], // top left
+    [0.5, 0.5, 0], // bottom right
+    [-0.5, 0.5, 0], // top right
+  ];
   
-
-  async init(device: GPUDevice) {
-    this.vertexBuffer = device.createBuffer({
-      label: "Cell vertices",
-      size: this.vertices.byteLength,
-      usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
-    });
-  }
 }

@@ -1,3 +1,4 @@
+import { vec3 } from "gl-matrix";
 import { Scene } from "../models/scene";
 
 export class Renderer {
@@ -6,13 +7,11 @@ export class Renderer {
   context!: GPUCanvasContext;
 
   pipeline!: GPURenderPipeline;
-  uniformBuffer!: GPUBuffer;
-  bindGroup!: GPUBindGroup;
   vertexBufferLayout = {
-    arrayStride: 8,
+    arrayStride: 12,
     attributes: [
       {
-        format: "float32x2" as GPUVertexFormat,
+        format: "float32x3" as GPUVertexFormat,
         offset: 0,
         shaderLocation: 0, // Position. Matches @location(0) in the @vertex shader.
       },
@@ -58,14 +57,14 @@ export class Renderer {
 
                     @vertex
                     fn main(
-                        @location(0) position : vec4<f32>
+                        @location(0) position : vec3<f32>
                     ) -> @builtin(position) vec4<f32> {
-                        return uniforms.modelMatrix * position;
+                        return uniforms.modelMatrix * vec4(position, 1);
                     }
                         
                       @fragment
                       fn fragmentMain() -> @location(0) vec4f {
-                        return vec4f(1, 0, 1, 0);
+                        return vec4f(1, 0, 0, 0);
                       }`,
     });
 
@@ -102,22 +101,6 @@ export class Renderer {
       },
     });
 
-    this.uniformBuffer = this.device.createBuffer({
-      size: 64, // Taille d'une matrice 4x4 (4x4 floats, 4 bytes par float)
-      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-    });
-
-    this.bindGroup = this.device.createBindGroup({
-      layout: this.pipeline.getBindGroupLayout(0),
-      entries: [
-        {
-          binding: 0,
-          resource: {
-            buffer: this.uniformBuffer,
-          },
-        },
-      ],
-    });
   }
 
   async render() {
@@ -135,22 +118,56 @@ export class Renderer {
     });
     pass.setPipeline(this.pipeline);
 
-    pass.setBindGroup(0, this.bindGroup);
+    let vertices: vec3[] = [];
+    for (const block of this.scene.blocks.values()) {
+      for (const mesh of block.meshes.values()) {
+        for (const vertex of mesh.vertices) {
+          vertices.push(vertex);
+        }
+      }
+    }
 
     for (const block of this.scene.blocks.values()) {
       for (const mesh of block.meshes.values()) {
-        await mesh.init(this.device);
-        console.error({ mesh });
+
+        const uniformBuffer = this.device.createBuffer({
+          size: 64, // Taille d'une matrice 4x4 (4x4 floats, 4 bytes par float)
+          usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+        });
+        const bindGroup = this.device.createBindGroup({
+          layout: this.pipeline.getBindGroupLayout(0),
+          entries: [
+            {
+              binding: 0,
+              resource: {
+                buffer: uniformBuffer,
+              },
+            },
+          ],
+        });
+
+        pass.setBindGroup(0, bindGroup);
         this.device.queue.writeBuffer(
-          this.uniformBuffer,
+          uniformBuffer,
           0,
           new Float32Array(mesh.transform)
         );
 
-        pass.setVertexBuffer(0, mesh.vertexBuffer);
-        this.device.queue.writeBuffer(mesh.vertexBuffer, 0, mesh.vertices);
+        const vertices = mesh.vertices.map((v) => [v[0], v[1], v[2]]).flat(); // Transformer en tableau plat [x, y, z, ...]
+        const vertexBuffer = this.device.createBuffer({
+          label: "Mesh vertices",
+          size: 4 * vertices.length, // Taille du buffer (nombre de floats * taille float)
+          usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
+        });
 
-        pass.draw(mesh.vertices.length / 2);
+        this.device.queue.writeBuffer(
+          vertexBuffer,
+          0,
+          new Float32Array(vertices)
+        );
+        pass.setVertexBuffer(0, vertexBuffer);
+
+        pass.draw(mesh.vertices.length);
       }
     }
 

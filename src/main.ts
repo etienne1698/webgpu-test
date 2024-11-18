@@ -6,15 +6,15 @@ import { Renderer } from "./view/renderer";
 
 const canvas: HTMLCanvasElement = document.querySelector("#app-canvas")!;
 
-const t0 = mat4.create();
+const square1 = new Block([new SquareMesh([0, 0, 0])]);
+const square2 = new Block([new SquareMesh([.25, .25, 0])]);
 
-const t1 = mat4.create();
-mat4.translate(t1, t1, [.5, .5, 0]);
+square1.translate([-0.25, -0.25, 1]);
 
 const scene = new Scene(
   new Map([
-    ["square1", new Block([new SquareMesh(t0)])],
-    ["square2", new Block([new SquareMesh(t1)])],
+    ["square1", square1],
+    ["square2", square2],
   ])
 );
 
@@ -23,3 +23,4 @@ const renderer = new Renderer(canvas, scene);
 await renderer.init();
 
 renderer.render();
+
