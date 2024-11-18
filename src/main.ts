@@ -9,7 +9,6 @@ const canvas: HTMLCanvasElement = document.querySelector("#app-canvas")!;
 const square1 = new Block([new SquareMesh([0, 0, 0])]);
 const square2 = new Block([new SquareMesh([0.25, 0.25, 0])]);
 
-square1.translate([-0.25, -0.25, 1]);
 
 const scene = new Scene(
   new Map([

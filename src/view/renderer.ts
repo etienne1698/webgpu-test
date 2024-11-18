@@ -1,5 +1,6 @@
 import { vec3 } from "gl-matrix";
 import { Scene } from "../models/scene";
+import { Camera } from "../models/camera";
 
 export class Renderer {
   adapter!: GPUAdapter;
@@ -54,12 +55,13 @@ export class Renderer {
                         modelMatrix : mat4x4<f32>
                     };
                     @binding(0) @group(0) var<uniform> uniforms : Uniforms;
+                    @binding(1) @group(0) var<uniform> cameraPos : vec3<f32>;
 
                     @vertex
                     fn main(
                         @location(0) position : vec3<f32>
                     ) -> @builtin(position) vec4<f32> {
-                        return uniforms.modelMatrix * vec4(position, 1);
+                        return uniforms.modelMatrix * vec4(position - cameraPos, 1);
                     }
                         
                       @fragment
@@ -78,6 +80,11 @@ export class Renderer {
             entries: [
               {
                 binding: 0,
+                visibility: GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE,
+                buffer: {},
+              },
+              {
+                binding: 1,
                 visibility: GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE,
                 buffer: {},
               },
@@ -100,10 +107,9 @@ export class Renderer {
         ],
       },
     });
-
   }
 
-  async render() {
+  async render(camera: Camera) {
     const encoder = this.device.createCommandEncoder();
 
     const pass = encoder.beginRenderPass({
@@ -129,34 +135,52 @@ export class Renderer {
 
     for (const block of this.scene.blocks.values()) {
       for (const mesh of block.meshes.values()) {
-
         const uniformBuffer = this.device.createBuffer({
           size: 64, // Taille d'une matrice 4x4 (4x4 floats, 4 bytes par float)
           usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
         });
-        const bindGroup = this.device.createBindGroup({
-          layout: this.pipeline.getBindGroupLayout(0),
-          entries: [
-            {
-              binding: 0,
-              resource: {
-                buffer: uniformBuffer,
-              },
-            },
-          ],
+
+        const cameraPosBuffer = this.device.createBuffer({
+          size: 4 * 3,
+          usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
         });
 
-        pass.setBindGroup(0, bindGroup);
+        pass.setBindGroup(
+          0,
+          this.device.createBindGroup({
+            layout: this.pipeline.getBindGroupLayout(0),
+            entries: [
+              {
+                binding: 0,
+                resource: {
+                  buffer: uniformBuffer,
+                },
+              },
+              {
+                binding: 1,
+                resource: {
+                  buffer: cameraPosBuffer,
+                },
+              },
+            ],
+          })
+        );
+
         this.device.queue.writeBuffer(
           uniformBuffer,
           0,
           new Float32Array(mesh.transform)
         );
+        this.device.queue.writeBuffer(
+          cameraPosBuffer,
+          0,
+          new Float32Array(camera.position)
+        );
 
         const vertices = mesh.vertices.map((v) => [v[0], v[1], v[2]]).flat(); // Transformer en tableau plat [x, y, z, ...]
         const vertexBuffer = this.device.createBuffer({
           label: "Mesh vertices",
-          size: 4 * vertices.length + 4 * 3, // Taille du buffer (taille float * nombre de floats)
+          size: 4 * vertices.length, // Taille du buffer (taille float * nombre de floats)
           usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
         });
 
@@ -164,11 +188,6 @@ export class Renderer {
           vertexBuffer,
           0,
           new Float32Array(vertices)
-        );
-        this.device.queue.writeBuffer(
-          vertexBuffer,
-          vertices.length * 4,
-          new Float32Array([1, 1, 1])
         );
         pass.setVertexBuffer(0, vertexBuffer);
 

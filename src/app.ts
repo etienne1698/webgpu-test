@@ -1,3 +1,4 @@
+import { Camera } from "./models/camera";
 import { Control } from "./models/control";
 import { Scene } from "./models/scene";
 import { Renderer } from "./view/renderer";
@@ -12,6 +13,7 @@ export class App {
   controls: Control[] = [];
   scene!: Scene;
   canvas!: HTMLCanvasElement;
+  camera = new Camera();
 
   private renderer!: Renderer;
 
@@ -26,7 +28,7 @@ export class App {
 
   async init() {
     for (const control of this.controls) {
-      control.init(this.scene);
+      control.init(this.scene, this.camera);
     }
     await this.renderer.init();
     this.run();
@@ -34,7 +36,7 @@ export class App {
 
   run() {
     this.controls.forEach((control) => control.update());
-    this.renderer.render();
+    this.renderer.render(this.camera);
     requestAnimationFrame(this.run);
   }
 }
