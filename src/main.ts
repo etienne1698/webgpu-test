@@ -23,3 +23,4 @@ app.init();
 
 app.camera!.rotateX(degeesToRadiant(45));
 app.camera!.rotateY(degeesToRadiant(45));
+app.camera!.translate([2, -3, -3]);

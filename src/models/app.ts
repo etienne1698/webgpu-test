@@ -32,7 +32,6 @@ export class App {
     }
     await this.renderer.init();
     this.run();
-    console.error(this.scene.meshes)
   }
 
   run() {

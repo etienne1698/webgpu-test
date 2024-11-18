@@ -43,7 +43,6 @@ export class KeyboardControl extends Control {
 
     this.linkKeyToAction("m", "backward");
     this.linkKeyToAction("p", "forward");
-    this.linkKeyToAction("down", "bottom");
     this.linkKeyToAction("up", "top");
     this.linkKeyToAction("down", "bottom");
     this.linkKeyToAction("left", "left");
@@ -68,7 +67,7 @@ export class KeyboardControl extends Control {
       this.camera.translate([-0.01, 0, 0]);
     }
     if (this.actions.forward) {
-      this.camera.translate([0, 0, -0.01]);
+      this.camera.translate([0, 0, 0.01]);
     }
     if (this.actions.backward) {
       this.camera.translate([0, 0, -0.01]);
