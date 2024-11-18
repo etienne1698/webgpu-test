@@ -1,7 +1,7 @@
 import { vec3 } from "gl-matrix";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
-import shaderCode from './shaders/shader.wgsl?raw';
+import shaderCode from "./shaders/shader.wgsl?raw";
 
 export class Renderer {
   adapter!: GPUAdapter;
@@ -67,11 +67,6 @@ export class Renderer {
                 visibility: GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE,
                 buffer: {},
               },
-              {
-                binding: 1,
-                visibility: GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE,
-                buffer: {},
-              },
             ],
           }),
         ],
@@ -119,12 +114,7 @@ export class Renderer {
 
     for (const block of this.scene.blocks.values()) {
       for (const mesh of block.meshes.values()) {
-        const uniformBuffer = this.device.createBuffer({
-          size: 64, // Taille d'une matrice 4x4 (4x4 floats, 4 bytes par float)
-          usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-        });
-
-        const cameraPosBuffer = this.device.createBuffer({
+        const cameraBuffer = this.device.createBuffer({
           size: 64,
           usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
         });
@@ -137,13 +127,7 @@ export class Renderer {
               {
                 binding: 0,
                 resource: {
-                  buffer: uniformBuffer,
-                },
-              },
-              {
-                binding: 1,
-                resource: {
-                  buffer: cameraPosBuffer,
+                  buffer: cameraBuffer,
                 },
               },
             ],
@@ -151,12 +135,7 @@ export class Renderer {
         );
 
         this.device.queue.writeBuffer(
-          uniformBuffer,
-          0,
-          new Float32Array(mesh.transform)
-        );
-        this.device.queue.writeBuffer(
-          cameraPosBuffer,
+          cameraBuffer,
           0,
           new Float32Array(camera.viewProjectionMatrix)
         );

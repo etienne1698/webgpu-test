@@ -3,29 +3,44 @@ import { mat4, vec3 } from "gl-matrix";
 export abstract class Mesh {
   abstract vertices: vec3[];
 
-  transform = mat4.create();
-
   constructor(position: vec3) {
-    this.translate(position);
+    setTimeout(() => {
+      this.translate(position);
+    }, 0);
   }
 
   translate(vector: vec3) {
-    mat4.translate(this.transform, this.transform, vector);
+    const m = mat4.translate(mat4.create(), mat4.create(), vector);
+    this.vertices.forEach((v) => {
+      vec3.transformMat4(v, v, m);
+    });
   }
 
   rotateX(rad: number) {
-    mat4.rotateX(this.transform, this.transform, rad);
+    const m = mat4.rotateX(mat4.create(), mat4.create(), rad);
+    this.vertices.forEach((v) => {
+      vec3.transformMat4(v, v, m);
+    });
   }
 
   rotateY(rad: number) {
-    mat4.rotateY(this.transform, this.transform, rad);
+    const m = mat4.rotateY(mat4.create(), mat4.create(), rad);
+    this.vertices.forEach((v) => {
+      vec3.transformMat4(v, v, m);
+    });
   }
 
   rotateZ(rad: number) {
-    mat4.rotateZ(this.transform, this.transform, rad);
+    const m = mat4.rotateZ(mat4.create(), mat4.create(), rad);
+    this.vertices.forEach((v) => {
+      vec3.transformMat4(v, v, m);
+    });
   }
 
   scale(vector: vec3) {
-    mat4.scale(this.transform, this.transform, vector);
+    const m = mat4.scale(mat4.create(), mat4.create(), vector);
+    this.vertices.forEach((v) => {
+      vec3.transformMat4(v, v, m);
+    });
   }
 }

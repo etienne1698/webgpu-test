@@ -1,28 +1,25 @@
-import { KeyboardMove } from "./controls/keyboard_move";
+import { KeyboardControl } from "./controls/keyboard_control";
 import { App } from "./models/app";
 import { Block } from "./models/block";
 import { Scene } from "./models/scene";
 import { degeesToRadiant } from "./utils";
-import { SquareMesh } from "./view/meshes/square_mesh";
-
+import { CubeMesh } from "./view/meshes/cube_mesh";
 const canvas: HTMLCanvasElement = document.querySelector("#app-canvas")!;
 
 const scene = new Scene(
-  new Map([["square1", new Block([new SquareMesh([0, 0, 0])])]])
+  new Map([
+    ["cube1", new Block([new CubeMesh([0, 0, 0])])],
+    ["cube2", new Block([new CubeMesh([1, 1, 1])])],
+  ])
 );
-
-let rotateZ = 0;
-document.addEventListener("keydown", (e) => {
-  if (e.code === "Enter") {
-    rotateZ += 45;
-    scene.getBlock("square1")!.rotateZ(degeesToRadiant(rotateZ));
-  }
-});
 
 const app = new App({
   scene,
   canvas,
-  controls: [new KeyboardMove()],
+  controls: [new KeyboardControl()],
 });
 
 app.init();
+
+app.camera!.rotateX(degeesToRadiant(45));
+app.camera!.rotateY(degeesToRadiant(45));
