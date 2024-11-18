@@ -61,7 +61,7 @@ export class Renderer {
                     fn main(
                         @location(0) position : vec3<f32>
                     ) -> @builtin(position) vec4<f32> {
-                        return uniforms.modelMatrix * vec4(position - cameraPos, 1);
+                        return uniforms.modelMatrix * vec4(position - cameraPos, 1) * vec4(cameraPos.z + 1, cameraPos.z + 1, 1, 1);
                     }
                         
                       @fragment

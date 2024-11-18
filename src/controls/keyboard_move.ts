@@ -100,13 +100,11 @@ export class KeyboardMove extends Control {
       this.camera.translate([-0.01, 0, 0]);
     }
 
-    
     if (this.keypressed.P) {
       this.camera.translate([0, 0, 0.01]);
     }
     if (this.keypressed.M) {
       this.camera.translate([0, 0, -0.01]);
     }
-
   }
 }
