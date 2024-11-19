@@ -19,6 +19,8 @@ export class App {
   loopInterval: number = 20;
   loop: (app: App) => void = () => {};
 
+  private appLoopIntervalID?: number;
+
   private renderer!: Renderer;
 
   constructor(props: AppProps) {
@@ -30,12 +32,12 @@ export class App {
     this.run = this.run.bind(this);
     this.startAppLoop = this.startAppLoop.bind(this);
     this.startRenderLoop = this.startRenderLoop.bind(this);
+    this.stopAppLoop = this.stopAppLoop.bind(this);
+    this.stopRenderLoop = this.stopRenderLoop.bind(this);
+    this.stop = this.stop.bind(this);
   }
 
   async init() {
-    for (const control of this.controls) {
-      control.init(this.scene, this.camera, this.canvas);
-    }
     await this.renderer.init();
   }
 
@@ -45,14 +47,31 @@ export class App {
   }
 
   startAppLoop() {
-    setInterval(() => {
+    this.appLoopIntervalID = setInterval(() => {
       this.controls.forEach((control) => control.update());
       this.loop(this);
     }, this.loopInterval);
   }
 
+  stopAppLoop() {
+    clearInterval(this.appLoopIntervalID);
+  }
+
+  stopRenderLoop() {}
+
   run() {
+    for (const control of this.controls) {
+      control.init(this.scene, this.camera, this.canvas);
+    }
     this.startAppLoop();
     this.startRenderLoop();
+  }
+
+  stop() {
+    for (const control of this.controls) {
+      control.destroy();
+    }
+    this.stopAppLoop();
+    this.stopRenderLoop();
   }
 }

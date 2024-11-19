@@ -4,10 +4,20 @@ import { Block } from "../models/block";
 import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
-
 export class MouseControl extends Control {
   onClick: (block: Block, mesh: Mesh) => void = () => {};
   isPressed = false;
+
+  private handleMouseUpBound: (e: MouseEvent) => void;
+  private handleMouseDownBound: (e: MouseEvent) => void;
+
+  constructor({ onClick }: { onClick: (block: Block, mesh: Mesh) => void }) {
+    super();
+    this.onClick = onClick;
+    
+    this.handleMouseUpBound = this.handleMouseUp.bind(this);
+    this.handleMouseDownBound = this.handleMouseDown.bind(this);
+  }
 
   handleClick(e: MouseEvent) {
     const ray = getRayFromMouse(e.clientX, e.clientY, this.canvas, this.camera);
@@ -31,26 +41,19 @@ export class MouseControl extends Control {
     this.isPressed = true;
   }
 
-  constructor({ onClick }: { onClick: (block: Block, mesh: Mesh) => void }) {
-    super();
-    this.onClick = onClick;
-  }
-
   init(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
     super.init(scene, camera, canvas);
-    canvas.addEventListener("mouseup", this.handleMouseUp.bind(this), false);
-    canvas.addEventListener("mousedown", this.handleMouseDown.bind(this), false);
+    // Utilise les méthodes liées stockées
+    this.canvas.addEventListener("mouseup", this.handleMouseUpBound, false);
+    this.canvas.addEventListener("mousedown", this.handleMouseDownBound, false);
   }
 
   async destroy() {
-    this.canvas.removeEventListener(
-      "mouseup",
-      this.handleMouseUp.bind(this),
-      false
-    );
+    // Supprime les écouteurs avec les références correctes
+    this.canvas.removeEventListener("mouseup", this.handleMouseUpBound, false);
     this.canvas.removeEventListener(
       "mousedown",
-      this.handleMouseDown.bind(this),
+      this.handleMouseDownBound,
       false
     );
   }

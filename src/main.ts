@@ -61,6 +61,15 @@ const app = new App({
   },
 });
 
+setTimeout(() => {
+  app.stop();
+  console.error('stop')
+}, 10_000);
+setTimeout(() => {
+  app.run();
+  console.error('start')
+}, 20_000);
+
 await app.init();
 
 app.camera!.rotateX(degeesToRadiant(45));
