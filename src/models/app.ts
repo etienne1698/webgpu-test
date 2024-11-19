@@ -37,7 +37,6 @@ export class App {
       control.init(this.scene, this.camera, this.canvas);
     }
     await this.renderer.init();
-    this.run();
   }
 
   startRenderLoop() {

@@ -56,13 +56,15 @@ const app = new App({
   ],
   loop(app) {
     if (mouseControl.isPressed) {
-      console.error('isPressed')
+      console.error("isPressed");
     }
   },
 });
 
-app.init();
+await app.init();
 
 app.camera!.rotateX(degeesToRadiant(45));
 app.camera!.rotateY(degeesToRadiant(45));
-app.camera!.translate([2, -3.5, -3]); 
+app.camera!.translate([2, -3.5, -3]);
+
+app.run();
