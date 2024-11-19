@@ -28,7 +28,7 @@ export class App {
 
   async init() {
     for (const control of this.controls) {
-      control.init(this.scene, this.camera);
+      control.init(this.scene, this.camera, this.canvas);
     }
     await this.renderer.init();
     this.run();

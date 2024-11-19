@@ -38,8 +38,8 @@ export class KeyboardControl extends Control {
     );
   }
 
-  async init(scene: Scene, camera: Camera) {
-    super.init(scene, camera);
+  async init(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
+    super.init(scene, camera, canvas);
 
     this.linkKeyToAction("m", "backward");
     this.linkKeyToAction("p", "forward");

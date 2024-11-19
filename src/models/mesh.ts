@@ -9,6 +9,20 @@ export abstract class Mesh {
     }, 0);
   }
 
+  computeAABB(): { boxMin: vec3; boxMax: vec3 } {
+    const boxMin: vec3 = [Infinity, Infinity, Infinity];
+    const boxMax: vec3 = [-Infinity, -Infinity, -Infinity];
+  
+    for (const vertex of this.vertices) {
+      for (let i = 0; i < 3; i++) { // X, Y, Z
+        boxMin[i] = Math.min(boxMin[i], vertex[i]);
+        boxMax[i] = Math.max(boxMax[i], vertex[i]);
+      }
+    }
+  
+    return { boxMin, boxMax };
+  }
+
   translate(vector: vec3) {
     const m = mat4.translate(mat4.create(), mat4.create(), vector);
     this.vertices.forEach((v) => {

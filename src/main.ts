@@ -1,4 +1,5 @@
 import { KeyboardControl } from "./controls/keyboard_control";
+import { MouseControl } from "./controls/mouse_control";
 import { App } from "./models/app";
 import { Block } from "./models/block";
 import { Scene } from "./models/scene";
@@ -16,11 +17,13 @@ const scene = new Scene(
 const app = new App({
   scene,
   canvas,
-  controls: [new KeyboardControl()],
+  controls: [new KeyboardControl(), new MouseControl()],
 });
 
 app.init();
 
-app.camera!.rotateX(degeesToRadiant(45));
+/* app.camera!.rotateX(degeesToRadiant(45));
 app.camera!.rotateY(degeesToRadiant(45));
-app.camera!.translate([2, -3, -3]);
+app.camera!.translate([2, -3, -3]); */
+
+app.camera!.translate([0, 0, -1]);
