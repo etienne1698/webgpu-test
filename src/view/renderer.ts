@@ -1,4 +1,3 @@
-import { vec3 } from "gl-matrix";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import shaderCode from "./shaders/shader.wgsl?raw";
@@ -15,12 +14,12 @@ export class Renderer {
       {
         format: "float32x3" as GPUVertexFormat,
         offset: 0,
-        shaderLocation: 0, // Position. Matches @location(0) in the @vertex shader.
+        shaderLocation: 0,
       },
       {
         format: "float32x4" as GPUVertexFormat,
-        offset: 0,
-        shaderLocation: 1, // Position. Matches @location(0) in the @vertex shader.
+        offset: 12,
+        shaderLocation: 1,
       },
     ],
   };
@@ -137,7 +136,17 @@ export class Renderer {
         );
 
         const vertexData = mesh.vertices
-          .map((v, index) => [v[0], v[1], v[2], ...mesh.verticiesColors[index]])
+          .map((v, index) => {
+            return [
+              v[0],
+              v[1],
+              v[2],
+              mesh.verticiesColors[index][0],
+              mesh.verticiesColors[index][1],
+              mesh.verticiesColors[index][2],
+              mesh.verticiesColors[index][3],
+            ];
+          })
           .flat();
 
         const vertexBuffer = this.device.createBuffer({

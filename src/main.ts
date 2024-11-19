@@ -11,8 +11,8 @@ const canvas: HTMLCanvasElement = document.querySelector("#app-canvas")!;
 
 const scene = new Scene(
   new Map([
+    ["cube0", new Block([new CubeMesh([-1, -1, -1], [vec4_colors.red])])],
     ["cube1", new Block([new CubeMesh([0, 0, 0], [vec4_colors.red])])],
-    ["cube2", new Block([new CubeMesh([1, 1, 1], [vec4_colors.blue])])],
   ])
 );
 

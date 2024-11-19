@@ -2,6 +2,7 @@ import { Camera } from "../models/camera";
 import { Control } from "../models/control";
 import { Scene } from "../models/scene";
 import { getRayFromMouse, isRayIntersectsBox } from "../helpers/math";
+import vec4_colors from "../helpers/vec4_colots";
 
 export class MouseControl extends Control {
   init(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
@@ -12,7 +13,7 @@ export class MouseControl extends Control {
         for (const mesh of block.meshes) {
           const { boxMin, boxMax } = mesh.computeAABB();
           if (isRayIntersectsBox(ray.origin, ray.direction, boxMin, boxMax)) {
-            console.error(block);
+            block.meshes[0].colors = [vec4_colors.blue]
           }
         }
       }
