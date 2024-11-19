@@ -1,4 +1,3 @@
-import { vec4 } from "gl-matrix";
 import { KeyboardControl } from "./controls/keyboard_control";
 import { MouseControl } from "./controls/mouse_control";
 import { App } from "./models/app";
@@ -7,6 +6,7 @@ import { Scene } from "./models/scene";
 import { degeesToRadiant } from "./helpers/math";
 import { CubeMesh } from "./view/meshes/cube_mesh";
 import vec4_colors from "./helpers/vec4_colots";
+import { KeyboardKeyHoldControl } from "./controls/keyboard_key_hold_control";
 const canvas: HTMLCanvasElement = document.querySelector("#app-canvas")!;
 
 const scene = new Scene(
@@ -19,13 +19,23 @@ const scene = new Scene(
 const app = new App({
   scene,
   canvas,
-  controls: [new KeyboardControl(), new MouseControl()],
+  controls: [
+    new KeyboardControl(),
+    new MouseControl({
+      onBlockClick: (block) => {
+        block.meshes[0].colors = [vec4_colors.purple];
+      },
+    }),
+    new KeyboardKeyHoldControl({
+      h:() => {
+        console.error('HH')
+      }
+    })
+  ],
 });
 
 app.init();
 
-
 app.camera!.rotateX(degeesToRadiant(45));
 app.camera!.rotateY(degeesToRadiant(45));
 app.camera!.translate([2, -3.5, -3]);
-

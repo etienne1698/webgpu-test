@@ -7,6 +7,7 @@ export type AppProps = {
   controls?: Control[];
   scene: Scene;
   canvas: HTMLCanvasElement;
+  loopInterval?: number;
 };
 
 export class App {
@@ -14,6 +15,7 @@ export class App {
   scene!: Scene;
   canvas!: HTMLCanvasElement;
   camera = new Camera();
+  loopInterval: number = 20;
 
   private renderer!: Renderer;
 
@@ -24,6 +26,8 @@ export class App {
 
     this.init = this.init.bind(this);
     this.run = this.run.bind(this);
+    this.startAppLoop = this.startAppLoop.bind(this);
+    this.startRenderLoop = this.startRenderLoop.bind(this);
   }
 
   async init() {
@@ -34,9 +38,19 @@ export class App {
     this.run();
   }
 
-  run() {
-    this.controls.forEach((control) => control.update());
+  startRenderLoop() {
     this.renderer.render(this.camera);
-    requestAnimationFrame(this.run);
+    requestAnimationFrame(this.startRenderLoop);
+  }
+
+  startAppLoop() {
+    setInterval(() => {
+      this.controls.forEach((control) => control.update());
+    }, this.loopInterval);
+  }
+
+  run() {
+    this.startAppLoop();
+    this.startRenderLoop();
   }
 }

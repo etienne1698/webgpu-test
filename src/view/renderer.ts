@@ -54,7 +54,6 @@ export class Renderer {
 
     const shaderModule = this.device.createShaderModule({
       label: "shader",
-      // code: shaderWgsl,
       code: shaderCode,
     });
 
