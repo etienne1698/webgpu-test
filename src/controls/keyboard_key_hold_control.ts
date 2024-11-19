@@ -7,7 +7,9 @@ export class KeyboardKeyHoldControl extends Control {
   mousetrap = new Mousetrap();
   pressed = new Map<string, boolean>();
 
-  constructor(public keyBinding: { [key: string]: () => void }) {
+  constructor(
+    public keyBinding: { [key: string]: (scene: Scene, camera: Camera) => void }
+  ) {
     super();
     this.keyBinding = keyBinding;
   }
@@ -42,7 +44,7 @@ export class KeyboardKeyHoldControl extends Control {
   update(): void {
     for (const key of Object.keys(this.keyBinding)) {
       if (this.pressed.get(key)) {
-        this.keyBinding[key]();
+        this.keyBinding[key](this.scene, this.camera);
       }
     }
   }

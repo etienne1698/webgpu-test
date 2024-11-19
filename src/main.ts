@@ -1,4 +1,3 @@
-import { KeyboardControl } from "./controls/keyboard_control";
 import { MouseControl } from "./controls/mouse_control";
 import { App } from "./models/app";
 import { Block } from "./models/block";
@@ -20,17 +19,31 @@ const app = new App({
   scene,
   canvas,
   controls: [
-    new KeyboardControl(),
     new MouseControl({
       onBlockClick: (block) => {
         block.meshes[0].colors = [vec4_colors.purple];
       },
     }),
     new KeyboardKeyHoldControl({
-      h:() => {
-        console.error('HH')
+      up(scene, camera) {
+        camera.translate([0, 0.01, 0]);
+      },
+      down(scene, camera) {
+        camera.translate([0, -0.01, 0]);
+      },
+      left(scene, camera) {
+        camera.translate([-0.01, 0, 0]);
+      },
+      right(scene, camera) {
+        camera.translate([0.01, 0, 0]);
+      },
+      p(scene, camera) {
+        camera.translate([0, 0, 0.01]);
+      },
+      m(scene, camera) {
+        camera.translate([0, 0, -0.01]);
       }
-    })
+    }),
   ],
 });
 
