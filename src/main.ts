@@ -15,41 +15,54 @@ const scene = new Scene(
   ])
 );
 
+const mouseControl = new MouseControl({
+  onClick: (block) => {
+    block.meshes[0].colors = [vec4_colors.purple];
+  },
+});
+
 const app = new App({
   scene,
   canvas,
   controls: [
-    new MouseControl({
-      onClick: (block) => {
-        block.meshes[0].colors = [vec4_colors.purple];
-      },
-    }),
+    mouseControl,
     new KeyboardKeyHoldControl({
       up(scene, camera) {
-        camera.translate([0, 0.01, 0]);
-      },
-      down(scene, camera) {
         camera.translate([0, -0.01, 0]);
       },
-      left(scene, camera) {
-        camera.translate([-0.01, 0, 0]);
+      down(scene, camera) {
+        camera.translate([0, 0.01, 0]);
       },
-      right(scene, camera) {
+      left(scene, camera) {
         camera.translate([0.01, 0, 0]);
       },
-      p(scene, camera) {
+      right(scene, camera) {
+        camera.translate([-0.01, 0, 0]);
+      },
+
+      z(scene, camera) {
         camera.translate([0, 0, 0.01]);
       },
-      m(scene, camera) {
+      s(scene, camera) {
         camera.translate([0, 0, -0.01]);
-      }
+      },
+      q(scene, camera) {
+        camera.translate([0.01, 0, 0]);
+      },
+      d(scene, camera) {
+        camera.translate([-0.01, 0, 0]);
+      },
     }),
   ],
-  loop(app) {}
+  loop(app) {
+    if (mouseControl.isPressed) {
+      console.error('isPressed')
+    }
+  },
 });
 
 app.init();
 
 app.camera!.rotateX(degeesToRadiant(45));
 app.camera!.rotateY(degeesToRadiant(45));
-app.camera!.translate([2, -3.5, -3]);
+app.camera!.translate([2, -3.5, -3]); 

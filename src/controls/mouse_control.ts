@@ -7,7 +7,7 @@ import { Camera } from "../models/camera";
 
 export class MouseControl extends Control {
   onClick: (block: Block, mesh: Mesh) => void = () => {};
-  pressed = false;
+  isPressed = false;
 
   handleClick(e: MouseEvent) {
     const ray = getRayFromMouse(e.clientX, e.clientY, this.canvas, this.camera);
@@ -24,11 +24,11 @@ export class MouseControl extends Control {
 
   handleMouseUp(e: MouseEvent) {
     this.handleClick(e);
-    this.pressed = true;
+    this.isPressed = false;
   }
 
   handleMouseDown(e: MouseEvent) {
-    this.pressed = false;
+    this.isPressed = true;
   }
 
   constructor({ onClick }: { onClick: (block: Block, mesh: Mesh) => void }) {
@@ -39,7 +39,7 @@ export class MouseControl extends Control {
   init(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
     super.init(scene, camera, canvas);
     canvas.addEventListener("mouseup", this.handleMouseUp.bind(this), false);
-    canvas.addEventListener("mousedown", this.handleMouseUp.bind(this), false);
+    canvas.addEventListener("mousedown", this.handleMouseDown.bind(this), false);
   }
 
   async destroy() {
@@ -50,7 +50,7 @@ export class MouseControl extends Control {
     );
     this.canvas.removeEventListener(
       "mousedown",
-      this.handleMouseUp.bind(this),
+      this.handleMouseDown.bind(this),
       false
     );
   }
