@@ -1,3 +1,8 @@
+struct VertexInput {
+    @location(0) position: vec3<f32>,
+    @location(1) color: vec4<f32>
+}
+
 struct Uniforms {
   modelMatrix: mat4x4<f32>
 };
@@ -5,9 +10,9 @@ struct Uniforms {
 
 @vertex
 fn main(
-    @location(0) position: vec3<f32>
+    input: VertexInput
 ) -> @builtin(position) vec4<f32> {
-    return cameraPos.modelMatrix * vec4(position, 1) ;
+    return cameraPos.modelMatrix * vec4(input.position, 1) ;
 }
 
 @fragment

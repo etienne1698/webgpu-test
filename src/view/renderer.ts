@@ -10,12 +10,17 @@ export class Renderer {
 
   pipeline!: GPURenderPipeline;
   vertexBufferLayout = {
-    arrayStride: 12,
+    arrayStride: 12 + 16,
     attributes: [
       {
         format: "float32x3" as GPUVertexFormat,
         offset: 0,
         shaderLocation: 0, // Position. Matches @location(0) in the @vertex shader.
+      },
+      {
+        format: "float32x4" as GPUVertexFormat,
+        offset: 0,
+        shaderLocation: 1, // Position. Matches @location(0) in the @vertex shader.
       },
     ],
   };
@@ -103,15 +108,6 @@ export class Renderer {
     });
     pass.setPipeline(this.pipeline);
 
-    let vertices: vec3[] = [];
-    for (const block of this.scene.blocks.values()) {
-      for (const mesh of block.meshes.values()) {
-        for (const vertex of mesh.vertices) {
-          vertices.push(vertex);
-        }
-      }
-    }
-
     for (const block of this.scene.blocks.values()) {
       for (const mesh of block.meshes.values()) {
         const cameraBuffer = this.device.createBuffer({
@@ -140,17 +136,20 @@ export class Renderer {
           new Float32Array(camera.viewProjectionMatrix)
         );
 
-        const vertices = mesh.vertices.map((v) => [v[0], v[1], v[2]]).flat(); // Transformer en tableau plat [x, y, z, ...]
+        const vertexData = mesh.vertices
+          .map((v, index) => [v[0], v[1], v[2], ...mesh.verticiesColors[index]])
+          .flat();
+
         const vertexBuffer = this.device.createBuffer({
           label: "Mesh vertices",
-          size: 4 * vertices.length, // Taille du buffer (taille float * nombre de floats)
+          size: 4 * vertexData.length,
           usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
         });
 
         this.device.queue.writeBuffer(
           vertexBuffer,
           0,
-          new Float32Array(vertices)
+          new Float32Array(vertexData)
         );
         pass.setVertexBuffer(0, vertexBuffer);
 

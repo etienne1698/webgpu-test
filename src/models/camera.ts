@@ -1,5 +1,5 @@
 import { mat4, vec3 } from "gl-matrix";
-import { degeesToRadiant } from "../utils";
+import { degeesToRadiant } from "../helpers/math";
 
 export class Camera {
   view: mat4 = mat4.create();

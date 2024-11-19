@@ -1,7 +1,7 @@
 import { Camera } from "../models/camera";
 import { Control } from "../models/control";
 import { Scene } from "../models/scene";
-import { getRayFromMouse, isRayIntersectsBox } from "../utils";
+import { getRayFromMouse, isRayIntersectsBox } from "../helpers/math";
 
 export class MouseControl extends Control {
   init(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {

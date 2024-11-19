@@ -1,25 +1,39 @@
-import { mat4, vec3 } from "gl-matrix";
+import { mat4, vec3, vec4 } from "gl-matrix";
+import vec4_colors from "../helpers/vec4_colots";
 
 export abstract class Mesh {
   abstract vertices: vec3[];
+  colors: vec4[];
 
-  constructor(position: vec3) {
+  constructor(position: vec3, colors: vec4[]) {
+    this.colors = colors;
     setTimeout(() => {
       this.translate(position);
     }, 0);
   }
 
+  get verticiesColors() {
+    if (this.colors.length === 1) {
+      return this.vertices.map(() => this.colors[0]);
+    }
+    if (this.colors.length == this.vertices.length) {
+      return this.colors;
+    }
+    return this.vertices.map(() => vec4_colors.red);
+  }
+
   computeAABB(): { boxMin: vec3; boxMax: vec3 } {
     const boxMin: vec3 = [Infinity, Infinity, Infinity];
     const boxMax: vec3 = [-Infinity, -Infinity, -Infinity];
-  
+
     for (const vertex of this.vertices) {
-      for (let i = 0; i < 3; i++) { // X, Y, Z
+      for (let i = 0; i < 3; i++) {
+        // X, Y, Z
         boxMin[i] = Math.min(boxMin[i], vertex[i]);
         boxMax[i] = Math.max(boxMax[i], vertex[i]);
       }
     }
-  
+
     return { boxMin, boxMax };
   }
 
