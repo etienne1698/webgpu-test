@@ -20,7 +20,7 @@ const app = new App({
   canvas,
   controls: [
     new MouseControl({
-      onBlockClick: (block) => {
+      onClick: (block) => {
         block.meshes[0].colors = [vec4_colors.purple];
       },
     }),
@@ -45,6 +45,7 @@ const app = new App({
       }
     }),
   ],
+  loop(app) {}
 });
 
 app.init();

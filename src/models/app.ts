@@ -8,6 +8,7 @@ export type AppProps = {
   scene: Scene;
   canvas: HTMLCanvasElement;
   loopInterval?: number;
+  loop?: (app: App) => void;
 };
 
 export class App {
@@ -16,6 +17,7 @@ export class App {
   canvas!: HTMLCanvasElement;
   camera = new Camera();
   loopInterval: number = 20;
+  loop: (app: App) => void = () => {};
 
   private renderer!: Renderer;
 
@@ -46,6 +48,7 @@ export class App {
   startAppLoop() {
     setInterval(() => {
       this.controls.forEach((control) => control.update());
+      this.loop(this);
     }, this.loopInterval);
   }
 
