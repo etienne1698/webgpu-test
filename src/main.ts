@@ -8,7 +8,6 @@ import vec4_colors from "./helpers/vec4_colots";
 import { KeyboardKeyHoldControl } from "./controls/keyboard_key_hold_control";
 
 const canvas: HTMLCanvasElement = document.querySelector("#app-canvas")!;
-const CAMERA_SPEED = 0.05;
 
 const scene = new Scene(
   new Map([
@@ -32,33 +31,7 @@ const app = new App({
   canvas,
   controls: [
     mouseControl,
-    new KeyboardKeyHoldControl({
-      up(scene, camera) {
-        camera.translate([0, -CAMERA_SPEED, 0]);
-      },
-      down(scene, camera) {
-        camera.translate([0, CAMERA_SPEED, 0]);
-      },
-      left(scene, camera) {
-        camera.translate([CAMERA_SPEED, 0, 0]);
-      },
-      right(scene, camera) {
-        camera.translate([-CAMERA_SPEED, 0, 0]);
-      },
-
-      z(scene, camera) {
-        camera.translate([0, 0, CAMERA_SPEED]);
-      },
-      s(scene, camera) {
-        camera.translate([0, 0, -CAMERA_SPEED]);
-      },
-      q(scene, camera) {
-        camera.translate([CAMERA_SPEED, 0, 0]);
-      },
-      d(scene, camera) {
-        camera.translate([-CAMERA_SPEED, 0, 0]);
-      },
-    }),
+    new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
   ],
   loop(app) {
     if (mouseControl.isPressed) {
