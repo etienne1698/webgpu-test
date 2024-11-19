@@ -4,6 +4,7 @@ import { Block } from "../models/block";
 import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
+
 export class MouseControl extends Control {
   onClick: (block: Block, mesh: Mesh) => void = () => {};
   isPressed = false;
@@ -14,7 +15,7 @@ export class MouseControl extends Control {
   constructor({ onClick }: { onClick: (block: Block, mesh: Mesh) => void }) {
     super();
     this.onClick = onClick;
-    
+
     this.handleMouseUpBound = this.handleMouseUp.bind(this);
     this.handleMouseDownBound = this.handleMouseDown.bind(this);
   }
