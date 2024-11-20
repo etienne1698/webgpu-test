@@ -2,6 +2,7 @@ import Mousetrap from "mousetrap";
 import { Camera } from "../models/camera";
 import { Control } from "../models/control";
 import { Scene } from "../models/scene";
+import { degeesToRadiant } from "../helpers/math";
 
 type KeyBinding = {
   [key: string]: (scene: Scene, camera: Camera) => void;
@@ -39,6 +40,12 @@ export class KeyboardKeyHoldControl extends Control {
       d(scene, camera) {
         camera.translate([-CAMERA_SPEED, 0, 0]);
       },
+      a(scene, camera) {
+        camera.rotateY(degeesToRadiant(2));
+      },
+      e(scene, camera) {
+        camera.rotateY(-degeesToRadiant(2));
+      }
     } as KeyBinding;
   }
 

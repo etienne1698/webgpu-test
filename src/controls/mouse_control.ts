@@ -5,22 +5,37 @@ import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 
+type MouseControlAction = (block: Block, mesh: Mesh) => void;
+
 export class MouseControl extends Control {
-  onClick: (block: Block, mesh: Mesh) => void = () => {};
+  onClick?: MouseControlAction = () => {};
+  onSlide?: MouseControlAction;
   isPressed = false;
+
+  coord = { x: 0, y: 0 };
 
   private handleMouseUpBound: (e: MouseEvent) => void;
   private handleMouseDownBound: (e: MouseEvent) => void;
+  private handleMouseMoveBound: (e: MouseEvent) => void;
 
-  constructor({ onClick }: { onClick: (block: Block, mesh: Mesh) => void }) {
+  constructor({
+    onClick,
+    onSlide,
+  }: {
+    onClick?: MouseControlAction;
+    onSlide?: MouseControlAction;
+  }) {
     super();
     this.onClick = onClick;
+    this.onSlide = onSlide;
 
     this.handleMouseUpBound = this.handleMouseUp.bind(this);
     this.handleMouseDownBound = this.handleMouseDown.bind(this);
+    this.handleMouseMoveBound = this.handleMouseMove.bind(this);
   }
 
   handleClick(e: MouseEvent) {
+    if (!this.onClick) return;
     const ray = getRayFromMouse(e.clientX, e.clientY, this.canvas, this.camera);
 
     for (const block of this.scene.blocks.values()) {
@@ -42,22 +57,33 @@ export class MouseControl extends Control {
     this.isPressed = true;
   }
 
+  handleMouseMove(e: MouseEvent) {
+    this.coord = { x: e.clientX, y: e.clientY };
+  }
+
   init(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
     super.init(scene, camera, canvas);
-    // Utilise les méthodes liées stockées
     this.canvas.addEventListener("mouseup", this.handleMouseUpBound, false);
     this.canvas.addEventListener("mousedown", this.handleMouseDownBound, false);
+    this.canvas.addEventListener("mousemove", this.handleMouseMoveBound, false);
   }
 
   async destroy() {
-    // Supprime les écouteurs avec les références correctes
     this.canvas.removeEventListener("mouseup", this.handleMouseUpBound, false);
     this.canvas.removeEventListener(
       "mousedown",
       this.handleMouseDownBound,
       false
     );
+
+    this.canvas.removeEventListener(
+      "mousedown",
+      this.handleMouseMoveBound,
+      false
+    );
   }
 
-  update() {}
+  update() {
+    //console.error(this.coord);
+  }
 }

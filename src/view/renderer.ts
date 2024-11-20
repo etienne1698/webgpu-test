@@ -85,9 +85,13 @@ export class Renderer {
         targets: [
           {
             format: canvasFormat,
+            blend: undefined
           },
         ],
       },
+      primitive: {
+        cullMode: 'back'
+      }
     });
   }
 

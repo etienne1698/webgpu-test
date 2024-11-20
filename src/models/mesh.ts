@@ -5,8 +5,8 @@ export abstract class Mesh {
   abstract vertices: vec3[];
   colors: vec4[];
 
-  constructor(position: vec3, colors: vec4[]) {
-    this.colors = colors;
+  constructor(position: vec3, colors?: vec4[]) {
+    this.colors = colors || [[0, 0, 0, 0]];
     setTimeout(() => {
       this.translate(position);
     }, 0);
