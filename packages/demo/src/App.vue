@@ -5,8 +5,6 @@ import type { AppProvide } from "./types";
 
 const canvas = ref();
 
-const scene = new Scene();
-
 const renderedApp = ref<App>();
 
 onMounted(async () => {

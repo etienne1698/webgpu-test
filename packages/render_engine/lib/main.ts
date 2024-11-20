@@ -10,35 +10,6 @@ import { Mesh } from "./models/mesh";
 import { Camera } from "./models/camera";
 import { Control } from "./models/control";
 
-/* const canvas: HTMLCanvasElement = document.querySelector("#app-canvas")!;
-
-const scene = new Scene(
-  new Map([
-    ["cube0", new Block([new CubeMesh([-1, -1, -1], [randomColor()])])],
-    ["cube1", new Block([new CubeMesh([-0.5, -0.5, -0.5], [colors.red])])],
-  ])
-);
-
-const app = new App({
-  scene,
-  canvas,
-  controls: [
-    new ClickControl((block) => {
-      block.meshes[0].colors = new CubeMesh([0, 0, 0]).vertices.map(
-        randomColor
-      );
-    }),
-    new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
-  ],
-});
-
-(async () => {
-  await app.init();
-
-  app.camera!.translate([0, 0, 10]);
-
-  app.run();
-})(); */
 
 export {
   App,
