@@ -28,7 +28,7 @@ export class MouseControl extends Control {
   }
 
   
-  handleMouseUp(e: MouseEvent) {
+  handleMouseUp() {
     
     this.isPressed = false;
   }

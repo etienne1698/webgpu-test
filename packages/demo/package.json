@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vue": "^3.5.12",
-    "@etienne/render_engine": "0.1.0"
+    "render_engine": "0.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",

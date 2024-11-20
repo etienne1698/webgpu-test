@@ -2,7 +2,6 @@ import { ClickControl } from "./controls/click_control";
 import { App } from "./models/app";
 import { Block } from "./models/block";
 import { Scene } from "./models/scene";
-import { degeesToRadiant, isEqual } from "./helpers/math";
 import { CubeMesh } from "./view/meshes/cube_mesh";
 import { colors, randomColor } from "./helpers/vec4_colots";
 import { KeyboardKeyHoldControl } from "./controls/keyboard_key_hold_control";
@@ -27,11 +26,12 @@ const app = new App({
     }),
     new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
   ],
-  loop(app) {},
 });
 
-await app.init();
+(async () => {
+  await app.init();
 
-app.camera!.translate([0, 0, 10]);
+  app.camera!.translate([0, 0, 10]);
 
-app.run();
+  app.run();
+})();

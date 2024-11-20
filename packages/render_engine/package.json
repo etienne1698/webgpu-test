@@ -1,8 +1,9 @@
 {
-  "name": "@etienne/render_engine",
+  "name": "render_engine",
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "module": "dist/render_engine.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

@@ -45,13 +45,16 @@ export function getRayFromMouse(
   vec4.transformMat4(farPoint, farPoint, inverseProjectionView);
 
   // Passer en coordonnées homogènes
+  // @ts-ignore
   vec3.scale(nearPoint, nearPoint, 1 / nearPoint[3]);
+  // @ts-ignore
   vec3.scale(farPoint, farPoint, 1 / farPoint[3]);
 
   return {
     origin: nearPoint as vec3,
     direction: vec3.normalize(
       vec3.create(),
+      // @ts-ignore
       vec3.subtract(vec3.create(), farPoint, nearPoint)
     ),
   };

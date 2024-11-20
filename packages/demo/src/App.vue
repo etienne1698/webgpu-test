@@ -1,30 +1,38 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { Scene, App, Block, CubeMesh } from "render_engine";
+import { ref, onMounted } from "vue";
+
+const canvas = ref();
+
+const scene = new Scene();
+
+console.error({ App });
+
+onMounted(async () => {
+  if (!canvas.value) return;
+  console.error(canvas.value);
+
+  const scene = new Scene(
+    new Map([
+      ["cube0", new Block([new CubeMesh([-1, -1, -1])])],
+      ["cube1", new Block([new CubeMesh([-0.5, -0.5, -0.5])])],
+    ])
+  );
+
+  const app = new App({
+    scene,
+    canvas: canvas.value,
+    controls: [],
+  });
+
+  await app.init();
+  app.camera!.translate([0, 0, 10]);
+  app.run();
+});
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <canvas ref="canvas" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<style scoped></style>
