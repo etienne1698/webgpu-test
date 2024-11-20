@@ -7,6 +7,7 @@ import {
   ClickControl,
   KeyboardKeyHoldControl,
   randomColor,
+  colors,
 } from "render_engine";
 import { ref, onMounted, provide } from "vue";
 import type { AppProvide } from "../types";
@@ -20,8 +21,16 @@ onMounted(async () => {
 
   const scene = new Scene(
     new Map([
-      ["cube0", new Block([new CubeMesh([-1, -1, -1])])],
-      ["cube1", new Block([new CubeMesh([-0.5, -0.5, -0.5])])],
+      [
+        "cube0",
+        new Block([
+          new CubeMesh(
+            [-1, -1, -1],
+            new CubeMesh([0, 0, 0]).vertices.map(randomColor)
+          ),
+        ]),
+      ],
+      ["cube1", new Block([new CubeMesh([-0.5, -0.5, -0.5], [randomColor()])])],
     ])
   );
 
@@ -48,7 +57,7 @@ provide<AppProvide>("app-provide", { renderedApp });
 
 <template>
   <div class="flex flex-col h-screen">
-    <Header class="border border-solid border-slate-200" />
+    <Header />
     <div class="flex-1 w-full flex">
       <div />
       <canvas ref="canvas" class="h-full w-full" />

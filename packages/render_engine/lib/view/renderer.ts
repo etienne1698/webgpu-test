@@ -7,6 +7,7 @@ export class Renderer {
   device!: GPUDevice;
   context!: GPUCanvasContext;
 
+  multisampleTexture!: GPUTexture;
   pipeline!: GPURenderPipeline;
   vertexBufferLayout = {
     arrayStride: 12 + 16,
@@ -57,8 +58,21 @@ export class Renderer {
       code: shaderCode,
     });
 
+    this.multisampleTexture = this.device.createTexture({
+      format: this.context.getCurrentTexture().format,
+      usage: GPUTextureUsage.RENDER_ATTACHMENT,
+      size: [
+        this.context.getCurrentTexture().width,
+        this.context.getCurrentTexture().height,
+      ],
+      sampleCount: 4,
+    });
+
     this.pipeline = this.device.createRenderPipeline({
       label: "Cell pipeline",
+      multisample: {
+        count: 4,
+      },
       layout: this.device.createPipelineLayout({
         label: "vertexLayout",
         bindGroupLayouts: [
@@ -85,13 +99,13 @@ export class Renderer {
         targets: [
           {
             format: canvasFormat,
-            blend: undefined
+            blend: undefined,
           },
         ],
       },
       primitive: {
-        cullMode: 'back'
-      }
+        cullMode: "back",
+      },
     });
   }
 
@@ -101,10 +115,11 @@ export class Renderer {
     const pass = encoder.beginRenderPass({
       colorAttachments: [
         {
-          view: this.context.getCurrentTexture().createView(),
+          view: this.multisampleTexture.createView(),
           loadOp: "clear",
-          clearValue: { r: 0, g: 0, b: 0.4, a: 1.0 },
+          clearValue: { r: 0, g: 0, b: 0, a: 1.0 },
           storeOp: "store",
+          resolveTarget: this.context.getCurrentTexture().createView(),
         },
       ],
     });

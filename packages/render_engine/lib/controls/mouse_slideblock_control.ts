@@ -75,6 +75,5 @@ export class MouseControl extends Control {
   }
 
   update() {
-    //console.error(this.coord);
   }
 }

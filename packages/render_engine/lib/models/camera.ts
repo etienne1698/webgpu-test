@@ -15,6 +15,16 @@ export class Camera {
     );
   }
 
+  setPerspectiveAspectRatio(aspectRatio: number) {
+    this.projection = mat4.perspective(
+      this.projection,
+      degeesToRadiant(25),
+      aspectRatio,
+      0.1,
+      1000
+    );
+  }
+
   translate(v: vec3) {
     mat4.translate(this.view, this.view, v);
   }

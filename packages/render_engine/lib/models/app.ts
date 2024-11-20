@@ -25,11 +25,18 @@ export class App {
 
   constructor(props: AppProps) {
     Object.assign(this, props);
-
     this.renderer = new Renderer(this.canvas, this.scene);
   }
 
   async init() {
+    this.camera.setPerspectiveAspectRatio(
+      this.canvas.clientWidth / this.canvas.clientHeight
+    );
+    window.addEventListener("resize", () => {
+      this.camera.setPerspectiveAspectRatio(
+        this.canvas.clientWidth / this.canvas.clientHeight
+      );
+    });
     await this.renderer.init();
   }
 
