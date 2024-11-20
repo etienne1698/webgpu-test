@@ -1,2 +1,2 @@
-# shacn-vue for making components lib
-ex: npx shadcn-vue@latest add button 
+# shadcn-vue for making components lib
+[shadcn ](https://www.shadcn-vue.com/docs/)

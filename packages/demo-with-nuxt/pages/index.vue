@@ -47,8 +47,14 @@ provide<AppProvide>("app-provide", { renderedApp });
 </script>
 
 <template>
-  <Header />
-  <canvas ref="canvas" width="512" height="512" />
+  <div class="flex flex-col h-screen">
+    <Header class="border border-solid border-slate-200" />
+    <div class="flex-1 w-full flex">
+      <div />
+      <canvas ref="canvas" class="h-full w-full" />
+      <div />
+    </div>
+  </div>
 </template>
 
 <style scoped></style>
