@@ -29,6 +29,20 @@ export class Camera {
     mat4.translate(this.view, this.view, v);
   }
 
+  getDirection(): vec3 {
+    return [
+      -this.view[8], // m31
+      -this.view[9], // m32
+      -this.view[10], // m33
+    ];
+  }
+  getRotation(): vec3 {
+    const rotationX = Math.atan2(-this.view[6], this.view[10]);
+    const rotationY = Math.atan2(this.view[2], this.view[0]);
+    const rotationZ = Math.atan2(this.view[4], this.view[0]);
+    return [rotationX, rotationY, rotationZ];
+  }
+
   getPosition() {
     return mat4.getTranslation([0, 0, 0], this.view);
   }

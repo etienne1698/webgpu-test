@@ -17,23 +17,28 @@ const canvas = ref();
 
 const renderedApp = ref<App>();
 
+function generateRandomCubes(
+  scene: Scene,
+  N: number,
+  bounds: { x: number; y: number; z: number }
+) {
+  for (let i = 0; i < N; i++) {
+    const position = [
+      Math.random() * bounds.x - bounds.x / 2, // Position X aléatoire
+      Math.random() * bounds.y - bounds.y / 2, // Position Y aléatoire
+      Math.random() * bounds.z - bounds.z / 2, // Position Z aléatoire
+    ];
+    const color = randomColor();
+    const cubeMesh = new CubeMesh(position as CubeMesh["vertices"][0], [color]);
+    const block = new Block([cubeMesh]);
+    scene.addBlock(`cube${i + 1}`, block);
+  }
+}
+
 onMounted(async () => {
   if (!canvas.value) return;
 
-  const scene = new Scene(
-    new Map([
-      [
-        "cube0",
-        new Block([
-          new CubeMesh(
-            [-1, -1, -1],
-            new CubeMesh([0, 0, 0]).vertices.map(randomColor)
-          ),
-        ]),
-      ],
-      ["cube1", new Block([new CubeMesh([-0.5, -0.5, -0.5], [randomColor()])])],
-    ])
-  );
+  const scene = new Scene(new Map([]));
 
   renderedApp.value = new App({
     scene,
@@ -45,13 +50,12 @@ onMounted(async () => {
         );
       }),
       new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
-      new SlideBlockControl((block) => {
-
-      })
+      new SlideBlockControl((block) => {}),
     ],
   });
 
   await renderedApp.value.init();
+  generateRandomCubes(renderedApp.value.scene, 15, { x: 10, y: 10, z: 10 });
   renderedApp.value.camera!.translate([0, 0, 10]);
   renderedApp.value.run();
 });

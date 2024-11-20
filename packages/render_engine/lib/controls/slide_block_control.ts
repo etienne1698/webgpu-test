@@ -4,6 +4,7 @@ import { Block } from "../models/block";
 import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
+import { vec3 } from "gl-matrix";
 
 type SlideBlockAction = (block: Block, mesh: Mesh) => void;
 
@@ -43,6 +44,7 @@ export class SlideBlockControl extends Control {
           this.currentBlockSelected = block;
           this.currentMeshSelected = mesh;
           this.oldCoord = { x: e.clientX, y: e.clientY };
+          this.coord = { x: e.clientX, y: e.clientY };
         }
       }
     }
@@ -69,14 +71,32 @@ export class SlideBlockControl extends Control {
   update() {
     if (!this.onSlide) return;
     if (this.currentBlockSelected && this.currentMeshSelected) {
-      const x = this.oldCoord.x / this.coord.x;
-      if (x === Infinity) return;
-      console.error(this.oldCoord.x / this.coord.x);
-      this.currentBlockSelected.translate([
-        (this.oldCoord.x / this.coord.x) * 0.05,
-        0,
-        0,
-      ]);
+      const deltaX = this.coord.x - this.oldCoord.x;
+      const deltaY = this.coord.y - this.oldCoord.y;
+
+      // Calcule la direction "forward" de la caméra
+      const forward = vec3.create();
+      vec3.normalize(forward, this.camera.getDirection());
+
+      // Calcule le vecteur "right" basé sur l'orientation complète
+      const right = vec3.create();
+      vec3.cross(right, forward, [0, 1, 0]);
+      vec3.normalize(right, right);
+
+      // Recalcule le vecteur "up" prenant en compte toutes les rotations
+      const up = vec3.create();
+      vec3.cross(up, right, forward);
+      vec3.normalize(up, up);
+
+      // Projection du déplacement souris sur les vecteurs 3D
+      const translation = vec3.create();
+      vec3.scaleAndAdd(translation, translation, right, deltaX * 0.01);
+      vec3.scaleAndAdd(translation, translation, up, -deltaY * 0.01);
+
+      // Applique la translation au bloc
+      this.currentBlockSelected.translate(translation);
+
+      // Met à jour les coordonnées anciennes pour la prochaine itération
       this.oldCoord = { ...this.coord };
     }
   }
