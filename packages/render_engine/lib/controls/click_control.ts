@@ -20,7 +20,7 @@ export class ClickControl extends Control {
   private handleMouseUp(e: MouseEvent) {
     if (!this.onClick) return;
 
-    const raycaster = new Raycaster();
+    
     const canvasRect = this.canvas.getBoundingClientRect();
     const normalizedX =
       ((e.clientX - canvasRect.left) / canvasRect.width) * 2 - 1;
@@ -28,7 +28,7 @@ export class ClickControl extends Control {
       ((e.clientY - canvasRect.top) / canvasRect.height) * 2 -
       1
     );
-    raycaster.setFromCamera([normalizedX, normalizedY], this.camera);
+    const raycaster = Raycaster.fromCamera([normalizedX, normalizedY], this.camera);
 
     for (const block of this.scene.blocks.values()) {
       for (const mesh of block.meshes) {

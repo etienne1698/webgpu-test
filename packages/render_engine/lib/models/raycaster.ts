@@ -65,4 +65,10 @@ export class Raycaster {
       vec3.subtract(vec3.create(), farPoint, nearPoint)
     );
   }
+
+  static fromCamera(coords: vec2, camera: Camera) {
+    const r = new Raycaster();
+    r.setFromCamera(coords, camera);
+    return r;
+  }
 }

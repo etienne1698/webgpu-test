@@ -1,6 +1,3 @@
-import { vec3, vec4, mat4 } from "gl-matrix";
-import { Camera } from "../models/camera";
-
 export const degeesToRadiant = (deg: number) => deg * (Math.PI / 180);
 export const radiantToDegrees = (rad: number) => (rad / Math.PI) * 180;
 
