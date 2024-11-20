@@ -5,20 +5,18 @@ import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 
-type MouseControlAction = (block: Block, mesh: Mesh) => void;
+type SlideBlockAction = (block: Block, mesh: Mesh) => void;
 
-export class MouseControl extends Control {
-  onSlide?: MouseControlAction;
-  
-  isPressed = false;
+export class SlideBlockControl extends Control {
+  onSlide?: SlideBlockAction;
+
   coord = { x: 0, y: 0 };
+  oldCoord = { x: 0, y: 0 };
 
-  constructor({
-    onSlide,
-  }: {
-    onClick?: MouseControlAction;
-    onSlide?: MouseControlAction;
-  }) {
+  currentBlockSelected?: Block;
+  currentMeshSelected?: Mesh;
+
+  constructor(onSlide?: SlideBlockAction) {
     super();
     this.onSlide = onSlide;
 
@@ -27,28 +25,31 @@ export class MouseControl extends Control {
     this.handleMouseMove = this.handleMouseMove.bind(this);
   }
 
-  
   handleMouseUp() {
-    
-    this.isPressed = false;
+    this.currentBlockSelected = undefined;
+    this.currentMeshSelected = undefined;
+
+    this.coord = { x: 0, y: 0 };
+    this.oldCoord = { x: 0, y: 0 };
   }
 
   handleMouseDown(e: MouseEvent) {
-    this.isPressed = true;
-
     const ray = getRayFromMouse(e.clientX, e.clientY, this.canvas, this.camera);
 
     for (const block of this.scene.blocks.values()) {
       for (const mesh of block.meshes) {
         const { boxMin, boxMax } = mesh.computeAABB();
         if (isRayIntersectsBox(ray.origin, ray.direction, boxMin, boxMax)) {
-         
+          this.currentBlockSelected = block;
+          this.currentMeshSelected = mesh;
+          this.oldCoord = { x: e.clientX, y: e.clientY };
         }
       }
     }
   }
 
   handleMouseMove(e: MouseEvent) {
+    if (!this.currentMeshSelected || !this.currentBlockSelected) return;
     this.coord = { x: e.clientX, y: e.clientY };
   }
 
@@ -61,19 +62,22 @@ export class MouseControl extends Control {
 
   async destroy() {
     this.canvas.removeEventListener("mouseup", this.handleMouseUp, false);
-    this.canvas.removeEventListener(
-      "mousedown",
-      this.handleMouseDown,
-      false
-    );
-
-    this.canvas.removeEventListener(
-      "mousedown",
-      this.handleMouseMove,
-      false
-    );
+    this.canvas.removeEventListener("mousedown", this.handleMouseDown, false);
+    this.canvas.removeEventListener("mousedown", this.handleMouseMove, false);
   }
 
   update() {
+    if (!this.onSlide) return;
+    if (this.currentBlockSelected && this.currentMeshSelected) {
+      const x = this.oldCoord.x / this.coord.x;
+      if (x === Infinity) return;
+      console.error(this.oldCoord.x / this.coord.x);
+      this.currentBlockSelected.translate([
+        (this.oldCoord.x / this.coord.x) * 0.05,
+        0,
+        0,
+      ]);
+      this.oldCoord = { ...this.coord };
+    }
   }
 }

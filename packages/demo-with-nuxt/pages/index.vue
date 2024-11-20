@@ -8,6 +8,7 @@ import {
   KeyboardKeyHoldControl,
   randomColor,
   colors,
+  SlideBlockControl,
 } from "render_engine";
 import { ref, onMounted, provide } from "vue";
 import type { AppProvide } from "../types";
@@ -44,6 +45,9 @@ onMounted(async () => {
         );
       }),
       new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
+      new SlideBlockControl((block) => {
+
+      })
     ],
   });
 
