@@ -1,5 +1,6 @@
-import { App } from "render_engine/src/lib";
+import { App } from "render_engine";
+import type { Ref } from "vue";
 
 export type AppProvide = {
-  renderedApp: App;
+  renderedApp: Ref<App>;
 };

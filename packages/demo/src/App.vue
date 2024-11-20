@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { Scene, App, Block, CubeMesh } from "render_engine";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, provide } from "vue";
+import type { AppProvide } from "./types";
 
 const canvas = ref();
 
 const scene = new Scene();
 
-console.error({ App });
+const renderedApp = ref<App>()
 
 onMounted(async () => {
   if (!canvas.value) return;
-  console.error(canvas.value);
 
   const scene = new Scene(
     new Map([
@@ -19,20 +19,23 @@ onMounted(async () => {
     ])
   );
 
-  const app = new App({
+  renderedApp.value = new App({
     scene,
     canvas: canvas.value,
     controls: [],
   });
 
-  await app.init();
-  app.camera!.translate([0, 0, 10]);
-  app.run();
+  await renderedApp.value.init();
+  renderedApp.value.camera!.translate([0, 0, 10]);
+  renderedApp.value.run();
+
 });
+
+provide<AppProvide>('app-provide', { renderedApp });
 </script>
 
 <template>
-  <canvas ref="canvas" />
+  <canvas ref="canvas" width="512" height="512" />
 </template>
 
 <style scoped></style>
