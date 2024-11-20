@@ -1,8 +1,10 @@
 import { vec4 } from "gl-matrix";
 
-const vec4_colors: { [color: string]: vec4 } = {
+export const colors: { [color: string]: vec4 } = {
   red: [1, 0, 0, 1],
   purple: [1, 0, 1, 1],
 };
 
-export default vec4_colors;
+export function randomColor(): vec4 {
+  return [Math.random(), Math.random(), Math.random(), 1];
+}

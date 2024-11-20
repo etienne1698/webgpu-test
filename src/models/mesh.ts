@@ -1,5 +1,5 @@
 import { mat4, vec3, vec4 } from "gl-matrix";
-import vec4_colors from "../helpers/vec4_colots";
+import { colors } from "../helpers/vec4_colots";
 
 export abstract class Mesh {
   abstract vertices: vec3[];
@@ -19,7 +19,7 @@ export abstract class Mesh {
     if (this.colors.length == this.vertices.length) {
       return this.colors;
     }
-    return this.vertices.map(() => vec4_colors.red);
+    return this.vertices.map(() => colors.red);
   }
 
   computeAABB(): { boxMin: vec3; boxMax: vec3 } {

@@ -8,7 +8,7 @@ export class Camera {
   constructor() {
     this.projection = mat4.perspective(
       this.projection,
-      degeesToRadiant(45),
+      degeesToRadiant(25),
       window.innerWidth / window.innerHeight,
       0.1,
       1000
