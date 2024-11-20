@@ -14,6 +14,7 @@ export class KeyboardKeyHoldControl extends Control {
 
   static get DEFAULT_KEY_BINDING() {
     const CAMERA_SPEED = 0.05;
+    const CAMERA_SPEED_RAD = degeesToRadiant(2);
     return {
       up(scene, camera) {
         camera.translate([0, -CAMERA_SPEED, 0]);
@@ -41,11 +42,17 @@ export class KeyboardKeyHoldControl extends Control {
         camera.translate([-CAMERA_SPEED, 0, 0]);
       },
       a(scene, camera) {
-        camera.rotateY(degeesToRadiant(2));
+        camera.rotateY(CAMERA_SPEED_RAD);
       },
       e(scene, camera) {
-        camera.rotateY(-degeesToRadiant(2));
-      }
+        camera.rotateY(-CAMERA_SPEED_RAD);
+      },
+      r(scene, camera) {
+        camera.rotateX(CAMERA_SPEED_RAD);
+      },
+      f(scene, camera) {
+        camera.rotateX(-CAMERA_SPEED_RAD);
+      },
     } as KeyBinding;
   }
 

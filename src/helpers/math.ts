@@ -2,6 +2,7 @@ import { vec3, vec4, mat4 } from "gl-matrix";
 import { Camera } from "../models/camera";
 
 export const degeesToRadiant = (deg: number) => deg * (Math.PI / 180);
+export const radiantToDegrees = (rad: number) => (rad / Math.PI) * 180;
 
 export function isEqual(var1: any, var2: any): boolean {
   if (var1 == null || var2 == null) return var1 == var2;

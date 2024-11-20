@@ -27,14 +27,6 @@ export class App {
     Object.assign(this, props);
 
     this.renderer = new Renderer(this.canvas, this.scene);
-
-    this.init = this.init.bind(this);
-    this.run = this.run.bind(this);
-    this.startAppLoop = this.startAppLoop.bind(this);
-    this.startRenderLoop = this.startRenderLoop.bind(this);
-    this.stopAppLoop = this.stopAppLoop.bind(this);
-    this.stopRenderLoop = this.stopRenderLoop.bind(this);
-    this.stop = this.stop.bind(this);
   }
 
   async init() {
@@ -43,7 +35,7 @@ export class App {
 
   startRenderLoop() {
     this.renderer.render(this.camera);
-    requestAnimationFrame(this.startRenderLoop);
+    requestAnimationFrame(this.startRenderLoop.bind(this));
   }
 
   startAppLoop() {
