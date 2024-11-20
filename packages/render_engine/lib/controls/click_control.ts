@@ -1,9 +1,9 @@
 import { Control } from "../models/control";
-import { getRayFromMouse, isRayIntersectsBox } from "../helpers/math";
 import { Block } from "../models/block";
 import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
+import { Raycaster } from "../models/raycaster";
 
 type ClickControlAction = (block: Block, mesh: Mesh, event: MouseEvent) => void;
 
@@ -19,12 +19,20 @@ export class ClickControl extends Control {
 
   private handleMouseUp(e: MouseEvent) {
     if (!this.onClick) return;
-    const ray = getRayFromMouse(e.clientX, e.clientY, this.canvas, this.camera);
+
+    const raycaster = new Raycaster();
+    const canvasRect = this.canvas.getBoundingClientRect();
+    const normalizedX =
+      ((e.clientX - canvasRect.left) / canvasRect.width) * 2 - 1;
+    const normalizedY = -(
+      ((e.clientY - canvasRect.top) / canvasRect.height) * 2 -
+      1
+    );
+    raycaster.setFromCamera([normalizedX, normalizedY], this.camera);
 
     for (const block of this.scene.blocks.values()) {
       for (const mesh of block.meshes) {
-        const { boxMin, boxMax } = mesh.computeAABB();
-        if (isRayIntersectsBox(ray.origin, ray.direction, boxMin, boxMax)) {
+        if (raycaster.isRayIntersect(mesh)) {
           this.onClick(block, mesh, e);
         }
       }

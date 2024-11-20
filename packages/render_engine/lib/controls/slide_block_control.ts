@@ -1,10 +1,10 @@
 import { Control } from "../models/control";
-import { getRayFromMouse, isRayIntersectsBox } from "../helpers/math";
 import { Block } from "../models/block";
 import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import { vec3 } from "gl-matrix";
+import { Raycaster } from "../models/raycaster";
 
 type SlideBlockAction = (block: Block, mesh: Mesh) => void;
 
@@ -35,12 +35,19 @@ export class SlideBlockControl extends Control {
   }
 
   handleMouseDown(e: MouseEvent) {
-    const ray = getRayFromMouse(e.clientX, e.clientY, this.canvas, this.camera);
+    const raycaster = new Raycaster();
+    const canvasRect = this.canvas.getBoundingClientRect();
+    const normalizedX =
+      ((e.clientX - canvasRect.left) / canvasRect.width) * 2 - 1;
+    const normalizedY = -(
+      ((e.clientY - canvasRect.top) / canvasRect.height) * 2 -
+      1
+    );
+    raycaster.setFromCamera([normalizedX, normalizedY], this.camera);
 
     for (const block of this.scene.blocks.values()) {
       for (const mesh of block.meshes) {
-        const { boxMin, boxMax } = mesh.computeAABB();
-        if (isRayIntersectsBox(ray.origin, ray.direction, boxMin, boxMax)) {
+        if (raycaster.isRayIntersect(mesh)) {
           this.currentBlockSelected = block;
           this.currentMeshSelected = mesh;
           this.oldCoord = { x: e.clientX, y: e.clientY };
