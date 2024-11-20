@@ -1,7 +1,15 @@
 <script setup lang="ts">
-import { Scene, App, Block, CubeMesh, ClickControl, KeyboardKeyHoldControl, randomColor } from "render_engine";
+import {
+  Scene,
+  App,
+  Block,
+  CubeMesh,
+  ClickControl,
+  KeyboardKeyHoldControl,
+  randomColor,
+} from "render_engine";
 import { ref, onMounted, provide } from "vue";
-import type { AppProvide } from "./types";
+import type { AppProvide } from "../types";
 
 const canvas = ref();
 
@@ -39,6 +47,7 @@ provide<AppProvide>("app-provide", { renderedApp });
 </script>
 
 <template>
+  <Header />
   <canvas ref="canvas" width="512" height="512" />
 </template>
 
