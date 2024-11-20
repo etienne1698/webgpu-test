@@ -16,20 +16,20 @@ export class Camera {
   }
 
   translate(v: vec3) {
-    const rotation = this.getRotation();
+    /*   const rotation = this.getRotation();
     const direction = this.getDirection();
-    /* 
+    
     console.error("rotation", ...Object.values(rotation));
-    console.error("direction", ...Object.values(direction)); */
-
-    console.error(direction);
+    console.error("direction", ...Object.values(direction)); 
 
     // TODO: translate should take in account the anglesNormalized
     const t: vec3 = [v[0] * (direction[1] - direction[2]), v[1], v[2]];
-    mat4.translate(this.view, this.view, t);
+    mat4.translate(this.view, this.view, t); */
+
+    mat4.translate(this.view, this.view, v);
   }
 
-  getDirection(): vec3 {
+  /* getDirection(): vec3 {
     return [
       -this.view[8], // m31
       -this.view[9], // m32
@@ -41,6 +41,10 @@ export class Camera {
     const rotationY = Math.atan2(this.view[2], this.view[0]);
     const rotationZ = Math.atan2(this.view[4], this.view[0]);
     return [rotationX, rotationY, rotationZ];
+  } */
+
+  getPosition() {
+    return mat4.getTranslation([0, 0, 0], this.view);
   }
 
   rotateX(rad: number) {
@@ -49,6 +53,9 @@ export class Camera {
 
   rotateY(rad: number) {
     mat4.rotateY(this.view, this.view, rad);
+/* 
+    const translation = this.getPosition();
+    this.translate([-translation[0] * (rad / Math.PI), 0, 0]); */
   }
 
   rotateZ(rad: number) {

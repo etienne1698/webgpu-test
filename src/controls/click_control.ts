@@ -40,7 +40,5 @@ export class ClickControl extends Control {
     this.canvas.removeEventListener("mouseup", this.handleMouseUp, false);
   }
 
-  update() {
-    //console.error(this.coord);
-  }
+  update() {}
 }
