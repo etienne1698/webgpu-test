@@ -29,7 +29,7 @@ export class Camera {
     mat4.translate(this.view, this.view, v);
   }
 
-  /* getDirection(): vec3 {
+  getDirection(): vec3 {
     return [
       -this.view[8], // m31
       -this.view[9], // m32
@@ -41,7 +41,7 @@ export class Camera {
     const rotationY = Math.atan2(this.view[2], this.view[0]);
     const rotationZ = Math.atan2(this.view[4], this.view[0]);
     return [rotationX, rotationY, rotationZ];
-  } */
+  }
 
   getPosition() {
     return mat4.getTranslation([0, 0, 0], this.view);
@@ -53,9 +53,6 @@ export class Camera {
 
   rotateY(rad: number) {
     mat4.rotateY(this.view, this.view, rad);
-/* 
-    const translation = this.getPosition();
-    this.translate([-translation[0] * (rad / Math.PI), 0, 0]); */
   }
 
   rotateZ(rad: number) {
@@ -63,6 +60,10 @@ export class Camera {
   }
 
   get viewProjectionMatrix() {
-    return mat4.multiply(mat4.create(), this.projection, this.view);
+    return mat4.multiply(
+      mat4.create(),
+      this.projection,
+      mat4.invert(mat4.create(), this.view)
+    );
   }
 }

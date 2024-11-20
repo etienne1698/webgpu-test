@@ -17,29 +17,29 @@ export class KeyboardKeyHoldControl extends Control {
     const CAMERA_SPEED_RAD = degeesToRadiant(2);
     return {
       up(scene, camera) {
-        camera.translate([0, -CAMERA_SPEED, 0]);
-      },
-      down(scene, camera) {
         camera.translate([0, CAMERA_SPEED, 0]);
       },
+      down(scene, camera) {
+        camera.translate([0, -CAMERA_SPEED, 0]);
+      },
       left(scene, camera) {
-        camera.translate([CAMERA_SPEED, 0, 0]);
+        camera.translate([-CAMERA_SPEED, 0, 0]);
       },
       right(scene, camera) {
-        camera.translate([-CAMERA_SPEED, 0, 0]);
+        camera.translate([CAMERA_SPEED, 0, 0]);
       },
 
       z(scene, camera) {
-        camera.translate([0, 0, CAMERA_SPEED]);
-      },
-      s(scene, camera) {
         camera.translate([0, 0, -CAMERA_SPEED]);
       },
+      s(scene, camera) {
+        camera.translate([0, 0, CAMERA_SPEED]);
+      },
       q(scene, camera) {
-        camera.translate([CAMERA_SPEED, 0, 0]);
+        camera.translate([-CAMERA_SPEED, 0, 0]);
       },
       d(scene, camera) {
-        camera.translate([-CAMERA_SPEED, 0, 0]);
+        camera.translate([CAMERA_SPEED, 0, 0]);
       },
       a(scene, camera) {
         camera.rotateY(CAMERA_SPEED_RAD);
@@ -48,10 +48,10 @@ export class KeyboardKeyHoldControl extends Control {
         camera.rotateY(-CAMERA_SPEED_RAD);
       },
       r(scene, camera) {
-        camera.rotateX(CAMERA_SPEED_RAD);
+        camera.rotateX(-CAMERA_SPEED_RAD);
       },
       f(scene, camera) {
-        camera.rotateX(-CAMERA_SPEED_RAD);
+        camera.rotateX(CAMERA_SPEED_RAD);
       },
     } as KeyBinding;
   }

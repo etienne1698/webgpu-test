@@ -32,6 +32,6 @@ const app = new App({
 
 await app.init();
 
-app.camera!.translate([0, 0, -6]);
+app.camera!.translate([0, 0, 10]);
 
 app.run();
