@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Scene, App, Block, CubeMesh } from "render_engine";
+import { Scene, App, Block, CubeMesh, ClickControl, KeyboardKeyHoldControl, randomColor } from "render_engine";
 import { ref, onMounted, provide } from "vue";
 import type { AppProvide } from "./types";
 
@@ -7,7 +7,7 @@ const canvas = ref();
 
 const scene = new Scene();
 
-const renderedApp = ref<App>()
+const renderedApp = ref<App>();
 
 onMounted(async () => {
   if (!canvas.value) return;
@@ -22,16 +22,22 @@ onMounted(async () => {
   renderedApp.value = new App({
     scene,
     canvas: canvas.value,
-    controls: [],
+    controls: [
+      new ClickControl((block) => {
+        block.meshes[0].colors = new CubeMesh([0, 0, 0]).vertices.map(
+          randomColor
+        );
+      }),
+      new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
+    ],
   });
 
   await renderedApp.value.init();
   renderedApp.value.camera!.translate([0, 0, 10]);
   renderedApp.value.run();
-
 });
 
-provide<AppProvide>('app-provide', { renderedApp });
+provide<AppProvide>("app-provide", { renderedApp });
 </script>
 
 <template>
