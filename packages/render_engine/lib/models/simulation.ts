@@ -1,31 +1,30 @@
 import { Camera } from "./camera";
 import { Control } from "./control";
 import { Scene } from "./scene";
-import { Renderer } from "../view/renderer";
+import { Renderer } from "./renderer";
 
-export type AppProps = {
+export type SimulationProps = {
   controls?: Control[];
   scene: Scene;
   canvas: HTMLCanvasElement;
   loopInterval?: number;
-  loop?: (app: App) => void;
+  loop?: (app: Simulation) => void;
 };
 
-export class App {
+export class Simulation {
   controls: Control[] = [];
   scene!: Scene;
   canvas!: HTMLCanvasElement;
   camera = new Camera();
   loopInterval: number = 20;
-  loop: (app: App) => void = () => {};
+  loop: (app: Simulation) => void = () => {};
 
-  private appLoopIntervalID?: number;
+  private simulationLoopIntervalID?: number;
 
-  private renderer!: Renderer;
+  
 
-  constructor(props: AppProps) {
+  constructor(private renderer: Renderer, props: SimulationProps) {
     Object.assign(this, props);
-    this.renderer = new Renderer(this.canvas, this.scene);
   }
 
   async init() {
@@ -41,19 +40,19 @@ export class App {
   }
 
   startRenderLoop() {
-    this.renderer.render(this.camera);
+    this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.startRenderLoop.bind(this));
   }
 
-  startAppLoop() {
-    this.appLoopIntervalID = setInterval(() => {
+  startSimulationLoop() {
+    this.simulationLoopIntervalID = setInterval(() => {
       this.controls.forEach((control) => control.update());
       this.loop(this);
     }, this.loopInterval);
   }
 
-  stopAppLoop() {
-    clearInterval(this.appLoopIntervalID);
+  stopSimulationLoop() {
+    clearInterval(this.simulationLoopIntervalID);
   }
 
   stopRenderLoop() {}
@@ -62,7 +61,7 @@ export class App {
     for (const control of this.controls) {
       control.connect(this.scene, this.camera, this.canvas);
     }
-    this.startAppLoop();
+    this.startSimulationLoop();
     this.startRenderLoop();
   }
 
@@ -70,7 +69,7 @@ export class App {
     for (const control of this.controls) {
       control.disconnect();
     }
-    this.stopAppLoop();
+    this.stopSimulationLoop();
     this.stopRenderLoop();
   }
 }

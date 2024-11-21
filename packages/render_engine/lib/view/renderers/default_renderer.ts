@@ -1,12 +1,9 @@
-import { Scene } from "../models/scene";
-import { Camera } from "../models/camera";
-import shaderCode from "./shaders/shader.wgsl?raw";
+import { Scene } from "../../models/scene";
+import { Camera } from "../../models/camera";
+import shaderCode from "../shaders/shader.wgsl?raw";
+import { Renderer } from "../../models/renderer";
 
-export class Renderer {
-  adapter!: GPUAdapter;
-  device!: GPUDevice;
-  context!: GPUCanvasContext;
-
+export class DefaultRenderer extends Renderer {
   multisampleTexture!: GPUTexture;
   pipeline!: GPURenderPipeline;
   vertexBufferLayout = {
@@ -25,26 +22,12 @@ export class Renderer {
     ],
   };
 
-  constructor(public canvas: HTMLCanvasElement, public scene: Scene) {}
+  constructor(canvas: HTMLCanvasElement) {
+    super(canvas);
+  }
 
   async init() {
-    if (!navigator.gpu) {
-      throw new Error("WebGPU not supported on this browser.");
-    }
-
-    const adapter = await navigator.gpu.requestAdapter();
-    if (!adapter) {
-      throw new Error("No appropriate GPUAdapter found.");
-    }
-    this.adapter = adapter;
-
-    this.device = await this.adapter.requestDevice();
-
-    const context = this.canvas.getContext("webgpu");
-    if (!context) {
-      throw new Error("No context.");
-    }
-    this.context = context;
+    await super.init();
     const canvasFormat = navigator.gpu.getPreferredCanvasFormat();
     this.context.configure({
       device: this.device,
@@ -107,7 +90,7 @@ export class Renderer {
     });
   }
 
-  async render(camera: Camera) {
+  async render(scene: Scene, camera: Camera) {
     const encoder = this.device.createCommandEncoder();
 
     const pass = encoder.beginRenderPass({
@@ -123,7 +106,7 @@ export class Renderer {
     });
     pass.setPipeline(this.pipeline);
 
-    for (const block of this.scene.blocks.values()) {
+    for (const block of scene.blocks.values()) {
       for (const mesh of block.meshes.values()) {
         const cameraBuffer = this.device.createBuffer({
           size: 64,
