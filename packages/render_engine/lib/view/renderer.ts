@@ -25,9 +25,7 @@ export class Renderer {
     ],
   };
 
-  constructor(public canvas: HTMLCanvasElement, public scene: Scene) {
-    this.canvas = canvas;
-  }
+  constructor(public canvas: HTMLCanvasElement, public scene: Scene) {}
 
   async init() {
     if (!navigator.gpu) {
@@ -117,7 +115,7 @@ export class Renderer {
         {
           view: this.multisampleTexture.createView(),
           loadOp: "clear",
-          clearValue: { r: 115/255, g: 186/255, b: 194/255, a: 1.0 },
+          clearValue: { r: 115 / 255, g: 186 / 255, b: 194 / 255, a: 1.0 },
           storeOp: "store",
           resolveTarget: this.context.getCurrentTexture().createView(),
         },
