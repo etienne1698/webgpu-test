@@ -16,7 +16,7 @@ import { SlideBlockControl } from "./controls/slide_block_control";
 
 import { colors, randomColor } from "./helpers/vec4_colots";
 
-import { Default3DRenderer } from "./renderers/default_renderer";
+import { Webgpu3DRenderer } from "./renderers/webgpu3D_renderer";
 
 export {
   Block,
@@ -34,5 +34,5 @@ export {
   KeyboardKeyHoldControl,
   colors,
   randomColor,
-  Default3DRenderer,
+  Webgpu3DRenderer,
 };

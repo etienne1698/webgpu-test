@@ -7,7 +7,7 @@ import {
   randomColor,
   Scene,
   SlideBlockControl,
-  Default3DRenderer,
+  Webgpu3DRenderer,
 } from "../lib/main";
 import { MenuControl } from "./controls/menu_control";
 
@@ -38,7 +38,7 @@ const btnForward: HTMLButtonElement = menu.getElementsByTagName("button")[0]!;
 const btnBackward: HTMLButtonElement = menu.getElementsByTagName("button")[1]!;
 const inputRotationY: HTMLInputElement = menu.getElementsByTagName("input")[0]!;
 
-const renderer = new Default3DRenderer(canvas);
+const renderer = new Webgpu3DRenderer(canvas);
 
 const app = new Simulation(renderer, {
   scene,
@@ -60,6 +60,6 @@ const app = new Simulation(renderer, {
 });
 
 await app.init();
-generateRandomCubes(app.scene, 150, { x: 50, y: 50, z: 50 });
+generateRandomCubes(app.scene, 100, { x: 50, y: 50, z: 50 });
 app.camera!.translate([0, 0, 10]);
 app.run();

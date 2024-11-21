@@ -3,11 +3,12 @@ import { Camera } from "../models/camera";
 import shaderCode from "../shaders/shader.wgsl?raw";
 import { Renderer } from "../models/renderer";
 
-export class Default3DRenderer extends Renderer {
-  adapter!: GPUAdapter;
+export class Webgpu3DRenderer extends Renderer {
   device!: GPUDevice;
   context!: GPUCanvasContext;
+  cameraBuffer!: GPUBuffer;
 
+  depthTexture!: GPUTexture;
   multisampleTexture!: GPUTexture;
   pipeline!: GPURenderPipeline;
   vertexBufferLayout = {
@@ -39,9 +40,8 @@ export class Default3DRenderer extends Renderer {
     if (!adapter) {
       throw new Error("No appropriate GPUAdapter found.");
     }
-    this.adapter = adapter;
 
-    this.device = await this.adapter.requestDevice();
+    this.device = await adapter.requestDevice();
 
     const context = this.canvas.getContext("webgpu");
     if (!context) {
@@ -70,8 +70,23 @@ export class Default3DRenderer extends Renderer {
       sampleCount: 4,
     });
 
+    this.depthTexture = this.device.createTexture({
+      size: [
+        this.context.getCurrentTexture().width,
+        this.context.getCurrentTexture().height,
+      ],
+      format: "depth24plus",
+      usage: GPUTextureUsage.RENDER_ATTACHMENT,
+      sampleCount: 4
+    });
+
     this.pipeline = this.device.createRenderPipeline({
       label: "Cell pipeline",
+      depthStencil: {
+        format: "depth24plus",
+        depthWriteEnabled: true,
+        depthCompare: "less",
+      },
       multisample: {
         count: 4,
       },
@@ -109,6 +124,11 @@ export class Default3DRenderer extends Renderer {
         cullMode: "back",
       },
     });
+
+    this.cameraBuffer = this.device.createBuffer({
+      size: 64,
+      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+    });
   }
 
   async render(scene: Scene, camera: Camera) {
@@ -124,67 +144,68 @@ export class Default3DRenderer extends Renderer {
           resolveTarget: this.context.getCurrentTexture().createView(),
         },
       ],
+      depthStencilAttachment: {
+        view: this.depthTexture.createView(),
+        depthLoadOp: "clear",
+        depthClearValue: 1.0, // Z maximum (le plus loin)
+        depthStoreOp: "store",
+      },
     });
     pass.setPipeline(this.pipeline);
 
+    pass.setBindGroup(
+      0,
+      this.device.createBindGroup({
+        layout: this.pipeline.getBindGroupLayout(0),
+        entries: [
+          {
+            binding: 0,
+            resource: {
+              buffer: this.cameraBuffer,
+            },
+          },
+        ],
+      })
+    );
+
+    this.device.queue.writeBuffer(
+      this.cameraBuffer,
+      0,
+      new Float32Array(camera.viewProjectionMatrix)
+    );
+
+    const vertexData: number[] = [];
+    let verticesLength = 0;
+
     for (const block of scene.blocks.values()) {
       for (const mesh of block.meshes.values()) {
-        const cameraBuffer = this.device.createBuffer({
-          size: 64,
-          usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-        });
+        for (const [i, v] of mesh.vertices.entries()) {
+          verticesLength++;
 
-        pass.setBindGroup(
-          0,
-          this.device.createBindGroup({
-            layout: this.pipeline.getBindGroupLayout(0),
-            entries: [
-              {
-                binding: 0,
-                resource: {
-                  buffer: cameraBuffer,
-                },
-              },
-            ],
-          })
-        );
-
-        this.device.queue.writeBuffer(
-          cameraBuffer,
-          0,
-          new Float32Array(camera.viewProjectionMatrix)
-        );
-
-        const vertexData = mesh.vertices
-          .map((v, index) => {
-            return [
-              v[0],
-              v[1],
-              v[2],
-              mesh.verticiesColors[index][0],
-              mesh.verticiesColors[index][1],
-              mesh.verticiesColors[index][2],
-              mesh.verticiesColors[index][3],
-            ];
-          })
-          .flat();
-
-        const vertexBuffer = this.device.createBuffer({
-          label: "Mesh vertices",
-          size: 4 * vertexData.length,
-          usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
-        });
-
-        this.device.queue.writeBuffer(
-          vertexBuffer,
-          0,
-          new Float32Array(vertexData)
-        );
-        pass.setVertexBuffer(0, vertexBuffer);
-
-        pass.draw(mesh.vertices.length);
+          vertexData.push(v[0]);
+          vertexData.push(v[1]);
+          vertexData.push(v[2]);
+          vertexData.push(mesh.verticiesColors[i][0]);
+          vertexData.push(mesh.verticiesColors[i][1]);
+          vertexData.push(mesh.verticiesColors[i][2]);
+          vertexData.push(mesh.verticiesColors[i][3]);
+        }
       }
     }
+    const vertexBuffer = this.device.createBuffer({
+      label: "Mesh vertices",
+      size: 4 * vertexData.length,
+      usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
+    });
+
+    this.device.queue.writeBuffer(
+      vertexBuffer,
+      0,
+      new Float32Array(vertexData)
+    );
+    pass.setVertexBuffer(0, vertexBuffer);
+
+    pass.draw(verticesLength);
 
     pass.end();
 
