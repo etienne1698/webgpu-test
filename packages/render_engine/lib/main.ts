@@ -1,10 +1,11 @@
-import { Simulation } from "./models/simulation";
 import { Block } from "./models/block";
-import { Scene } from "./models/scene";
-import { Mesh } from "./models/mesh";
 import { Camera } from "./models/camera";
 import { Control } from "./models/control";
+import { Mesh } from "./models/mesh";
+import { Raycaster } from "./models/raycaster";
 import { Renderer } from "./models/renderer";
+import { Scene } from "./models/scene";
+import { Simulation } from "./models/simulation";
 
 import { CubeMesh } from "./view/meshes/cube_mesh";
 import { SquareMesh } from "./view/meshes/square_mesh";
@@ -17,14 +18,15 @@ import { colors, randomColor } from "./helpers/vec4_colots";
 
 import { Default3DRenderer } from "./view/renderers/default_renderer";
 
-
 export {
-  Simulation,
   Block,
-  Scene,
-  Mesh,
   Camera,
   Control,
+  Mesh,
+  Raycaster,
+  Renderer,
+  Scene,
+  Simulation,
   CubeMesh,
   SquareMesh,
   ClickControl,
@@ -32,6 +34,5 @@ export {
   KeyboardKeyHoldControl,
   colors,
   randomColor,
-  Renderer,
   Default3DRenderer,
 };
