@@ -20,7 +20,7 @@ export class Camera {
       this.projection,
       degeesToRadiant(25),
       aspectRatio,
-      0.1,
+      1,
       1000
     );
   }
@@ -49,7 +49,6 @@ export class Camera {
   }
 
   setRotationY(rad: number) {
-    this.rotateY(-this.getRotation()[1]);
     this.rotateY(rad);
   }
 

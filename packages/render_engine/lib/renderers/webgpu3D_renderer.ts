@@ -60,6 +60,7 @@ export class Webgpu3DRenderer extends Renderer {
       code: shaderCode,
     });
 
+
     this.multisampleTexture = this.device.createTexture({
       format: this.context.getCurrentTexture().format,
       usage: GPUTextureUsage.RENDER_ATTACHMENT,

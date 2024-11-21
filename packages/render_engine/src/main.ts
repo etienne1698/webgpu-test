@@ -60,6 +60,6 @@ const app = new Simulation(renderer, {
 });
 
 await app.init();
-generateRandomCubes(app.scene, 100, { x: 50, y: 50, z: 50 });
-app.camera!.translate([0, 0, 10]);
+generateRandomCubes(app.scene, 200, { x: 50, y: 50, z: 50 });
+app.camera!.translate([0, 0, 30]);
 app.run();
