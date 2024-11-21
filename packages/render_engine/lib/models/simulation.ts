@@ -3,7 +3,7 @@ import { Control } from "./control";
 import { Scene } from "./scene";
 import { Renderer } from "./renderer";
 
-export type SimulationProps = {
+export type SimulationOptions = {
   controls?: Control[];
   scene: Scene;
   canvas: HTMLCanvasElement;
@@ -12,19 +12,18 @@ export type SimulationProps = {
 };
 
 export class Simulation {
-  controls: Control[] = [];
+  controls?: Control[];
   scene!: Scene;
   canvas!: HTMLCanvasElement;
+  loopInterval?: number;
+  loop?: (app: Simulation) => void;
+
   camera = new Camera();
-  loopInterval: number = 20;
-  loop: (app: Simulation) => void = () => {};
 
   private simulationLoopIntervalID?: number;
 
-  
-
-  constructor(private renderer: Renderer, props: SimulationProps) {
-    Object.assign(this, props);
+  constructor(private renderer: Renderer, options: SimulationOptions) {
+    Object.assign(this, options);
   }
 
   async init() {
@@ -46,8 +45,12 @@ export class Simulation {
 
   startSimulationLoop() {
     this.simulationLoopIntervalID = setInterval(() => {
-      this.controls.forEach((control) => control.update());
-      this.loop(this);
+      if (this.controls?.length) {
+        this.controls.forEach((control) => control.update());
+      }
+      if (this.loop) {
+        this.loop(this);
+      }
     }, this.loopInterval);
   }
 
@@ -57,18 +60,28 @@ export class Simulation {
 
   stopRenderLoop() {}
 
-  run() {
+  connectControls() {
+    if (!this.controls) return;
     for (const control of this.controls) {
       control.connect(this.scene, this.camera, this.canvas);
     }
-    this.startSimulationLoop();
-    this.startRenderLoop();
   }
 
-  stop() {
+  disconnectControls() {
+    if (!this.controls) return;
     for (const control of this.controls) {
       control.disconnect();
     }
+  }
+
+  run() {
+    this.startSimulationLoop();
+    this.startRenderLoop();
+    this.connectControls();
+  }
+
+  stop() {
+    this.disconnectControls();
     this.stopSimulationLoop();
     this.stopRenderLoop();
   }
