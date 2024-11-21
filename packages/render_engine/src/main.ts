@@ -8,9 +8,9 @@ import {
   Scene,
   SlideBlockControl,
 } from "../lib/main";
+import { MenuControl } from "./controls/menu_control";
 
-
-const canvas = document.getElementById('app-canvas')!;
+const canvas = document.querySelector<HTMLCanvasElement>("#app-canvas")!;
 
 const scene = new Scene(new Map([]));
 
@@ -32,9 +32,14 @@ function generateRandomCubes(
   }
 }
 
+const menu = document.getElementById("menu")!;
+const btnForward: HTMLButtonElement = menu.getElementsByTagName("button")[0]!;
+const btnBackward: HTMLButtonElement = menu.getElementsByTagName("button")[1]!;
+const inputRotationY: HTMLInputElement = menu.getElementsByTagName("input")[0]!;
+
 const app = new App({
   scene,
-  canvas: canvas,
+  canvas,
   controls: [
     new ClickControl((block) => {
       block.meshes[0].colors = new CubeMesh([0, 0, 0]).vertices.map(
@@ -43,10 +48,14 @@ const app = new App({
     }),
     new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
     new SlideBlockControl((block) => {}),
+    new MenuControl({
+      goForward: btnForward,
+      goBackward: btnBackward,
+    }),
   ],
 });
 
 await app.init();
-generateRandomCubes(app.scene, 15, { x: 10, y: 10, z: 10 });
+generateRandomCubes(app.scene, 150, { x: 50, y: 50, z: 50 });
 app.camera!.translate([0, 0, 10]);
 app.run();

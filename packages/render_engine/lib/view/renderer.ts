@@ -117,7 +117,7 @@ export class Renderer {
         {
           view: this.multisampleTexture.createView(),
           loadOp: "clear",
-          clearValue: { r: 0, g: 0, b: 0, a: 1.0 },
+          clearValue: { r: 115/255, g: 186/255, b: 194/255, a: 1.0 },
           storeOp: "store",
           resolveTarget: this.context.getCurrentTexture().createView(),
         },
