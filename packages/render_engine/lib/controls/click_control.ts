@@ -39,12 +39,12 @@ export class ClickControl extends Control {
     }
   }
 
-  init(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
-    super.init(scene, camera, canvas);
+  connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
+    super.connect(scene, camera, canvas);
     this.canvas.addEventListener("mouseup", this.handleMouseUp, false);
   }
 
-  async destroy() {
+  async disconnect() {
     this.canvas.removeEventListener("mouseup", this.handleMouseUp, false);
   }
 

@@ -51,6 +51,7 @@ const app = new App({
     new MenuControl({
       goForward: btnForward,
       goBackward: btnBackward,
+      rotateY: inputRotationY,
     }),
   ],
 });

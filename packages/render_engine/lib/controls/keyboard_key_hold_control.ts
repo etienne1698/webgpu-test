@@ -78,13 +78,13 @@ export class KeyboardKeyHoldControl extends Control {
     );
   }
 
-  async init(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
-    super.init(scene, camera, canvas);
+  async connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
+    super.connect(scene, camera, canvas);
     for (const key of Object.keys(this.keyBinding)) {
       this.bindHold(key);
     }
   }
-  async destroy(): Promise<void> {
+  async disconnect(): Promise<void> {
     this.mousetrap.reset();
   }
 

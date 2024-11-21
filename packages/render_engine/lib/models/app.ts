@@ -60,7 +60,7 @@ export class App {
 
   run() {
     for (const control of this.controls) {
-      control.init(this.scene, this.camera, this.canvas);
+      control.connect(this.scene, this.camera, this.canvas);
     }
     this.startAppLoop();
     this.startRenderLoop();
@@ -68,7 +68,7 @@ export class App {
 
   stop() {
     for (const control of this.controls) {
-      control.destroy();
+      control.disconnect();
     }
     this.stopAppLoop();
     this.stopRenderLoop();

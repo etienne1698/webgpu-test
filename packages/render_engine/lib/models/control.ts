@@ -6,12 +6,12 @@ export abstract class Control {
   camera!: Camera;
   canvas!: HTMLCanvasElement;
 
-  init(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
+  connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
     this.scene = scene;
     this.camera = camera;
     this.canvas = canvas;
   }
-  abstract destroy(): Promise<void>;
+  abstract disconnect(): Promise<void>;
 
   abstract update(): void;
 }

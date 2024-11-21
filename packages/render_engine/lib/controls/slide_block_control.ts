@@ -61,14 +61,14 @@ export class SlideBlockControl extends Control {
     this.coord = { x: e.clientX, y: e.clientY };
   }
 
-  init(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
-    super.init(scene, camera, canvas);
+  connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
+    super.connect(scene, camera, canvas);
     this.canvas.addEventListener("mouseup", this.handleMouseUp, false);
     this.canvas.addEventListener("mousedown", this.handleMouseDown, false);
     this.canvas.addEventListener("mousemove", this.handleMouseMove, false);
   }
 
-  async destroy() {
+  async disconnect() {
     this.canvas.removeEventListener("mouseup", this.handleMouseUp, false);
     this.canvas.removeEventListener("mousedown", this.handleMouseDown, false);
     this.canvas.removeEventListener("mousedown", this.handleMouseMove, false);

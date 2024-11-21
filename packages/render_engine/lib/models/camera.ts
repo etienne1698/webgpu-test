@@ -36,6 +36,7 @@ export class Camera {
       -this.view[10], // m33
     ];
   }
+
   getRotation(): vec3 {
     const rotationX = Math.atan2(-this.view[6], this.view[10]);
     const rotationY = Math.atan2(this.view[2], this.view[0]);
@@ -45,6 +46,11 @@ export class Camera {
 
   getPosition() {
     return mat4.getTranslation([0, 0, 0], this.view);
+  }
+
+  setRotationY(rad: number) {
+    this.rotateY(-this.getRotation()[2]);
+    this.rotateY(rad);
   }
 
   rotateX(rad: number) {
