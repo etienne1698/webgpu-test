@@ -3,7 +3,7 @@ import { Camera } from "../../models/camera";
 import shaderCode from "../shaders/shader.wgsl?raw";
 import { Renderer } from "../../models/renderer";
 
-export class DefaultRenderer extends Renderer {
+export class Default3DRenderer extends Renderer {
   multisampleTexture!: GPUTexture;
   pipeline!: GPURenderPipeline;
   vertexBufferLayout = {

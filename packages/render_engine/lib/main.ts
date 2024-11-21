@@ -15,7 +15,7 @@ import { SlideBlockControl } from "./controls/slide_block_control";
 
 import { colors, randomColor } from "./helpers/vec4_colots";
 
-import { DefaultRenderer } from "./view/renderers/default_renderer";
+import { Default3DRenderer } from "./view/renderers/default_renderer";
 
 
 export {
@@ -33,5 +33,5 @@ export {
   colors,
   randomColor,
   Renderer,
-  DefaultRenderer,
+  Default3DRenderer,
 };

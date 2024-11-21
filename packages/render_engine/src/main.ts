@@ -7,7 +7,7 @@ import {
   randomColor,
   Scene,
   SlideBlockControl,
-  DefaultRenderer,
+  Default3DRenderer,
 } from "../lib/main";
 import { MenuControl } from "./controls/menu_control";
 
@@ -38,7 +38,7 @@ const btnForward: HTMLButtonElement = menu.getElementsByTagName("button")[0]!;
 const btnBackward: HTMLButtonElement = menu.getElementsByTagName("button")[1]!;
 const inputRotationY: HTMLInputElement = menu.getElementsByTagName("input")[0]!;
 
-const renderer = new DefaultRenderer(canvas);
+const renderer = new Default3DRenderer(canvas);
 
 const app = new Simulation(renderer, {
   scene,
