@@ -49,7 +49,7 @@ export class Camera {
   }
 
   setRotationY(rad: number) {
-    this.rotateY(-this.getRotation()[2]);
+    this.rotateY(-this.getRotation()[1]);
     this.rotateY(rad);
   }
 

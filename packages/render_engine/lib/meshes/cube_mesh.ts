@@ -1,5 +1,5 @@
 import { vec3 } from "gl-matrix";
-import { Mesh } from "../../models/mesh";
+import { Mesh } from "../models/mesh";
 
 export class CubeMesh extends Mesh {
   vertices: vec3[] = [

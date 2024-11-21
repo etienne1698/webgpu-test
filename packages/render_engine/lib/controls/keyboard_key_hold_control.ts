@@ -14,7 +14,7 @@ export class KeyboardKeyHoldControl extends Control {
 
   static get DEFAULT_KEY_BINDING() {
     const CAMERA_SPEED = 0.05;
-    const CAMERA_SPEED_RAD = degeesToRadiant(2);
+    const CAMERA_SPEED_RAD = degeesToRadiant(.25);
     return {
       up(scene, camera) {
         camera.translate([0, CAMERA_SPEED, 0]);

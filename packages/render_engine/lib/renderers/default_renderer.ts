@@ -1,7 +1,7 @@
-import { Scene } from "../../models/scene";
-import { Camera } from "../../models/camera";
+import { Scene } from "../models/scene";
+import { Camera } from "../models/camera";
 import shaderCode from "../shaders/shader.wgsl?raw";
-import { Renderer } from "../../models/renderer";
+import { Renderer } from "../models/renderer";
 
 export class Default3DRenderer extends Renderer {
   adapter!: GPUAdapter;
