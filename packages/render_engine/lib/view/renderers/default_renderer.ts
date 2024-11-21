@@ -4,6 +4,10 @@ import shaderCode from "../shaders/shader.wgsl?raw";
 import { Renderer } from "../../models/renderer";
 
 export class Default3DRenderer extends Renderer {
+  adapter!: GPUAdapter;
+  device!: GPUDevice;
+  context!: GPUCanvasContext;
+
   multisampleTexture!: GPUTexture;
   pipeline!: GPURenderPipeline;
   vertexBufferLayout = {
@@ -27,7 +31,24 @@ export class Default3DRenderer extends Renderer {
   }
 
   async init() {
-    await super.init();
+    if (!navigator.gpu) {
+      throw new Error("WebGPU not supported on this browser.");
+    }
+
+    const adapter = await navigator.gpu.requestAdapter();
+    if (!adapter) {
+      throw new Error("No appropriate GPUAdapter found.");
+    }
+    this.adapter = adapter;
+
+    this.device = await this.adapter.requestDevice();
+
+    const context = this.canvas.getContext("webgpu");
+    if (!context) {
+      throw new Error("No context.");
+    }
+    this.context = context;
+
     const canvasFormat = navigator.gpu.getPreferredCanvasFormat();
     this.context.configure({
       device: this.device,

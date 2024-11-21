@@ -1,7 +1,7 @@
 export const degeesToRadiant = (deg: number) => deg * (Math.PI / 180);
 export const radiantToDegrees = (rad: number) => (rad / Math.PI) * 180;
 
-export function isEqual(var1: any, var2: any): boolean {
+/* export function isEqual(var1: any, var2: any): boolean {
   if (var1 == null || var2 == null) return var1 == var2;
   if (typeof var1 != typeof var2) return false;
   if (
@@ -19,4 +19,4 @@ export function isEqual(var1: any, var2: any): boolean {
     }, true);
   }
   return false;
-}
+} */
