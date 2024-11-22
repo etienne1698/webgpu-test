@@ -1,6 +1,6 @@
 import Mousetrap from "mousetrap";
 import { Camera } from "../models/camera";
-import { Control } from "../models/control";
+import { Control } from "../nodes/control";
 import { Scene } from "../models/scene";
 import { degeesToRadiant } from "../helpers/math";
 

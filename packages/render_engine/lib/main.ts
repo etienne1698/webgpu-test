@@ -1,6 +1,6 @@
 import { Node } from "./models/node";
 import { Camera } from "./models/camera";
-import { Control } from "./models/control";
+import { Control } from "./nodes/control";
 import { Mesh } from "./models/mesh";
 import { Raycaster } from "./models/raycaster";
 import { Renderer } from "./models/renderer";

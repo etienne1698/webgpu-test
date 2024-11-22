@@ -1,5 +1,5 @@
 import { Camera } from "./camera";
-import { Control } from "./control";
+import { Control } from "../nodes/control";
 import { Scene } from "./scene";
 import { Renderer } from "./renderer";
 

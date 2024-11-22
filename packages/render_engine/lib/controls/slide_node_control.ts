@@ -1,4 +1,4 @@
-import { Control } from "../models/control";
+import { Control } from "../nodes/control";
 import { Node } from "../models/node";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";

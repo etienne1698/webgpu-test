@@ -1,6 +1,6 @@
-import { Node } from "./node";
-import { Camera } from "./camera";
-import { Scene } from "./scene";
+import { Node } from "../models/node";
+import { Camera } from "../models/camera";
+import { Scene } from "../models/scene";
 
 export abstract class Control extends Node {
   scene!: Scene;

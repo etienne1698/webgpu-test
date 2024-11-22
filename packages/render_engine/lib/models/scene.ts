@@ -1,5 +1,5 @@
 import { Camera } from "./camera";
-import { Control } from "./control";
+import { Control } from "../nodes/control";
 import { Node } from "./node";
 
 export class Scene {
