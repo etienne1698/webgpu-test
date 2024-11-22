@@ -29,7 +29,7 @@ function generateRandomCubes(
     const color = randomColor();
     const cubeMesh = new CubeMesh(position as CubeMesh["vertices"][0], [color]);
     const block = new Block([cubeMesh]);
-    scene.addBlock(`cube${i + 1}`, block);
+    scene.addBlock(`cube${Math.random()}`, block);
   }
 }
 
@@ -60,6 +60,7 @@ const app = new Simulation(renderer, {
 });
 
 await app.init();
-generateRandomCubes(app.scene, 200, { x: 50, y: 50, z: 50 });
+generateRandomCubes(app.scene, 50, { x: 50, y: 50, z: 50 });
+
 app.camera!.translate([0, 0, 30]);
 app.run();
