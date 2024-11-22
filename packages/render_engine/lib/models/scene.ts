@@ -1,26 +1,26 @@
-import { Block } from "./block";
+import { Node } from "./node";
 
 export class Scene {
-  blocks: Map<string, Block> = new Map<string, Block>([]);
+  nodes: Map<string, Node> = new Map<string, Node>([]);
 
 
-  constructor(blocks?: Map<string, Block>) {
-    this.blocks = blocks || this.blocks;
+  constructor(nodes?: Map<string, Node>) {
+    this.nodes = nodes || this.nodes;
   }
 
-  addBlock(blockName: string, block: Block) {
-    this.blocks.set(blockName, block);
+  addNode(nodeName: string, node: Node) {
+    this.nodes.set(nodeName, node);
   }
 
-  deleteBlock(blockName: string) {
-    this.blocks.delete(blockName);
+  deleteNode(nodeName: string) {
+    this.nodes.delete(nodeName);
   }
 
-  updateBlock(blockName: string, block: Block) {
-    this.blocks.set(blockName, block);
+  updateNode(nodeName: string, node: Node) {
+    this.nodes.set(nodeName, node);
   }
 
-  getBlock(blockName: string) {
-    return this.blocks.get(blockName);
+  getNode(nodeName: string) {
+    return this.nodes.get(nodeName);
   }
 }

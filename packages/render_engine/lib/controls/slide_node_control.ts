@@ -1,23 +1,23 @@
 import { Control } from "../models/control";
-import { Block } from "../models/block";
+import { Node } from "../models/node";
 import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import { vec3 } from "gl-matrix";
 import { Raycaster } from "../models/raycaster";
 
-type SlideBlockAction = (block: Block, mesh: Mesh) => void;
+type SlideNodeAction = (node: Node, mesh: Mesh) => void;
 
-export class SlideBlockControl extends Control {
-  onSlide?: SlideBlockAction;
+export class SlideNodeControl extends Control {
+  onSlide?: SlideNodeAction;
 
   coord = { x: 0, y: 0 };
   oldCoord = { x: 0, y: 0 };
 
-  currentBlockSelected?: Block;
+  currentNodeSelected?: Node;
   currentMeshSelected?: Mesh;
 
-  constructor(onSlide?: SlideBlockAction) {
+  constructor(onSlide?: SlideNodeAction) {
     super();
     this.onSlide = onSlide;
 
@@ -27,7 +27,7 @@ export class SlideBlockControl extends Control {
   }
 
   handleMouseUp() {
-    this.currentBlockSelected = undefined;
+    this.currentNodeSelected = undefined;
     this.currentMeshSelected = undefined;
 
     this.coord = { x: 0, y: 0 };
@@ -44,10 +44,10 @@ export class SlideBlockControl extends Control {
     );
     const raycaster = Raycaster.fromCamera([normalizedX, normalizedY], this.camera);
 
-    for (const block of this.scene.blocks.values()) {
-      for (const mesh of block.meshes) {
+    for (const node of this.scene.nodes.values()) {
+      for (const mesh of node.meshes) {
         if (raycaster.isRayIntersect(mesh)) {
-          this.currentBlockSelected = block;
+          this.currentNodeSelected = node;
           this.currentMeshSelected = mesh;
           this.oldCoord = { x: e.clientX, y: e.clientY };
           this.coord = { x: e.clientX, y: e.clientY };
@@ -57,7 +57,7 @@ export class SlideBlockControl extends Control {
   }
 
   handleMouseMove(e: MouseEvent) {
-    if (!this.currentMeshSelected || !this.currentBlockSelected) return;
+    if (!this.currentMeshSelected || !this.currentNodeSelected) return;
     this.coord = { x: e.clientX, y: e.clientY };
   }
 
@@ -76,7 +76,7 @@ export class SlideBlockControl extends Control {
 
   update() {
     if (!this.onSlide) return;
-    if (this.currentBlockSelected && this.currentMeshSelected) {
+    if (this.currentNodeSelected && this.currentMeshSelected) {
       const deltaX = this.coord.x - this.oldCoord.x;
       const deltaY = this.coord.y - this.oldCoord.y;
 
@@ -100,7 +100,7 @@ export class SlideBlockControl extends Control {
       vec3.scaleAndAdd(translation, translation, up, -deltaY * 0.01);
 
       // Applique la translation au bloc
-      this.currentBlockSelected.translate(translation);
+      this.currentNodeSelected.translate(translation);
 
       // Met à jour les coordonnées anciennes pour la prochaine itération
       this.oldCoord = { ...this.coord };

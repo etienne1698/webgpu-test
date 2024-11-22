@@ -1,7 +1,7 @@
 import { vec3 } from "gl-matrix";
 import { Mesh } from "./mesh";
 
-export class Block {
+export class Node {
   constructor(public meshes: Mesh[]) {}
 
   translate(vector: vec3) {

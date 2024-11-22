@@ -1,4 +1,4 @@
-import { Block } from "./block";
+import { Node } from "./node";
 import { Camera } from "./camera";
 import { Scene } from "./scene";
 
@@ -18,16 +18,16 @@ export abstract class Control {
 }
 
 export abstract class BlocKControl {
-  block!: Block;
+  node!: Node;
   control!: Control;
 
   connect(
     scene: Scene,
     camera: Camera,
     canvas: HTMLCanvasElement,
-    block: Block
+    node: Node
   ) {
-    this.block = block;
+    this.node = node;
     this.control.connect(scene, camera, canvas);
   }
 

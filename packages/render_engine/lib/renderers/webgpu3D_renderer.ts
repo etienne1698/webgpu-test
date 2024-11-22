@@ -178,8 +178,8 @@ export class Webgpu3DRenderer extends Renderer {
     const vertexData: number[] = [];
     let verticesLength = 0;
 
-    for (const block of scene.blocks.values()) {
-      for (const mesh of block.meshes.values()) {
+    for (const node of scene.nodes.values()) {
+      for (const mesh of node.meshes.values()) {
         for (const [i, v] of mesh.vertices.entries()) {
           verticesLength++;
 

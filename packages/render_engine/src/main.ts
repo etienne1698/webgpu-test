@@ -1,12 +1,12 @@
 import {
   Simulation,
-  Block,
+  Node,
   ClickControl,
   CubeMesh,
   KeyboardKeyHoldControl,
   randomColor,
   Scene,
-  SlideBlockControl,
+  SlideNodeControl,
   Webgpu3DRenderer,
 } from "../lib/main";
 import { MenuControl } from "./controls/menu_control";
@@ -28,8 +28,8 @@ function generateRandomCubes(
     ];
     const color = randomColor();
     const cubeMesh = new CubeMesh(position as CubeMesh["vertices"][0], [color]);
-    const block = new Block([cubeMesh]);
-    scene.addBlock(`cube${Math.random()}`, block);
+    const node = new Node([cubeMesh]);
+    scene.addNode(`cube${Math.random()}`, node);
   }
 }
 
@@ -44,13 +44,13 @@ const app = new Simulation(renderer, {
   scene,
   canvas,
   controls: [
-    new ClickControl((block) => {
-      block.meshes[0].colors = new CubeMesh([0, 0, 0]).vertices.map(
+    new ClickControl((node) => {
+      node.meshes[0].colors = new CubeMesh([0, 0, 0]).vertices.map(
         randomColor
       );
     }),
     new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
-    new SlideBlockControl((block) => {}),
+    new SlideNodeControl((node) => {}),
     new MenuControl({
       goForward: btnForward,
       goBackward: btnBackward,

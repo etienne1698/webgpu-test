@@ -1,11 +1,11 @@
 import { Control } from "../models/control";
-import { Block } from "../models/block";
+import { Node } from "../models/node";
 import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import { Raycaster } from "../models/raycaster";
 
-type ClickControlAction = (block: Block, mesh: Mesh, event: MouseEvent) => void;
+type ClickControlAction = (node: Node, mesh: Mesh, event: MouseEvent) => void;
 
 export class ClickControl extends Control {
   onClick?: ClickControlAction = () => {};
@@ -30,10 +30,10 @@ export class ClickControl extends Control {
     );
     const raycaster = Raycaster.fromCamera([normalizedX, normalizedY], this.camera);
 
-    for (const block of this.scene.blocks.values()) {
-      for (const mesh of block.meshes) {
+    for (const node of this.scene.nodes.values()) {
+      for (const mesh of node.meshes) {
         if (raycaster.isRayIntersect(mesh)) {
-          this.onClick(block, mesh, e);
+          this.onClick(node, mesh, e);
         }
       }
     }
