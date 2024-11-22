@@ -1,14 +1,14 @@
 import { mat4, vec2, vec3, vec4 } from "gl-matrix";
 import { Camera } from "./camera";
-import { Mesh } from "./mesh";
+import { Node } from "./node";
 
 export class Raycaster {
   origin?: vec3;
   direction?: vec3;
 
-  isRayIntersect(mesh: Mesh): boolean {
+  isRayIntersect(node: Node): boolean {
     if (!this.origin || !this.direction) return false;
-    const { boxMin, boxMax } = mesh.computeAABB();
+    const { boxMin, boxMax } = node.computeAABB();
 
     let tmin = (boxMin[0] - this.origin[0]) / this.direction[0];
     let tmax = (boxMax[0] - this.origin[0]) / this.direction[0];

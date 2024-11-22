@@ -4,7 +4,6 @@ import { Scene } from "./scene";
 import { Renderer } from "./renderer";
 
 export type SimulationOptions = {
-  controls?: Control[];
   scene: Scene;
   canvas: HTMLCanvasElement;
   loopInterval?: number;
@@ -12,7 +11,6 @@ export type SimulationOptions = {
 };
 
 export class Simulation {
-  controls?: Control[];
   scene!: Scene;
   canvas!: HTMLCanvasElement;
   loopInterval?: number;
@@ -45,9 +43,7 @@ export class Simulation {
 
   startSimulationLoop() {
     this.simulationLoopIntervalID = setInterval(() => {
-      if (this.controls?.length) {
-        this.controls.forEach((control) => control.update());
-      }
+      this.scene.update();
       if (this.loop) {
         this.loop(this);
       }
@@ -61,17 +57,11 @@ export class Simulation {
   stopRenderLoop() {}
 
   connectControls() {
-    if (!this.controls) return;
-    for (const control of this.controls) {
-      control.connect(this.scene, this.camera, this.canvas);
-    }
+    this.scene.connectControls(this.camera, this.canvas);
   }
 
   disconnectControls() {
-    if (!this.controls) return;
-    for (const control of this.controls) {
-      control.disconnect();
-    }
+    this.scene.disconnectControls();
   }
 
   run() {

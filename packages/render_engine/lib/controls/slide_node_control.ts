@@ -45,7 +45,7 @@ export class SlideNodeControl extends Control {
     );
 
     for (const node of this.scene.nodes.values()) {
-      if (raycaster.isRayIntersect(node.mesh)) {
+      if (raycaster.isRayIntersect(node)) {
         this.currentNodeSelected = node;
         this.oldCoord = { x: e.clientX, y: e.clientY };
         this.coord = { x: e.clientX, y: e.clientY };
@@ -73,34 +73,34 @@ export class SlideNodeControl extends Control {
 
   update() {
     if (!this.onSlide) return;
-    if (this.currentNodeSelected) {
-      const deltaX = this.coord.x - this.oldCoord.x;
-      const deltaY = this.coord.y - this.oldCoord.y;
+    if (!this.currentNodeSelected) return;
 
-      // Calcule la direction "forward" de la caméra
-      const forward = vec3.create();
-      vec3.normalize(forward, this.camera.getDirection());
+    const deltaX = this.coord.x - this.oldCoord.x;
+    const deltaY = this.coord.y - this.oldCoord.y;
 
-      // Calcule le vecteur "right" basé sur l'orientation complète
-      const right = vec3.create();
-      vec3.cross(right, forward, [0, 1, 0]);
-      vec3.normalize(right, right);
+    // Calcule la direction "forward" de la caméra
+    const forward = vec3.create();
+    vec3.normalize(forward, this.camera.getDirection());
 
-      // Recalcule le vecteur "up" prenant en compte toutes les rotations
-      const up = vec3.create();
-      vec3.cross(up, right, forward);
-      vec3.normalize(up, up);
+    // Calcule le vecteur "right" basé sur l'orientation complète
+    const right = vec3.create();
+    vec3.cross(right, forward, [0, 1, 0]);
+    vec3.normalize(right, right);
 
-      // Projection du déplacement souris sur les vecteurs 3D
-      const translation = vec3.create();
-      vec3.scaleAndAdd(translation, translation, right, deltaX * 0.01);
-      vec3.scaleAndAdd(translation, translation, up, -deltaY * 0.01);
+    // Recalcule le vecteur "up" prenant en compte toutes les rotations
+    const up = vec3.create();
+    vec3.cross(up, right, forward);
+    vec3.normalize(up, up);
 
-      // Applique la translation au bloc
-      this.currentNodeSelected.translate(translation);
+    // Projection du déplacement souris sur les vecteurs 3D
+    const translation = vec3.create();
+    vec3.scaleAndAdd(translation, translation, right, deltaX * 0.01);
+    vec3.scaleAndAdd(translation, translation, up, -deltaY * 0.01);
 
-      // Met à jour les coordonnées anciennes pour la prochaine itération
-      this.oldCoord = { ...this.coord };
-    }
+    // Applique la translation au bloc
+    this.currentNodeSelected.translate(translation);
+
+    // Met à jour les coordonnées anciennes pour la prochaine itération
+    this.oldCoord = { ...this.coord };
   }
 }

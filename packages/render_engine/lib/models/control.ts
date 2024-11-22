@@ -17,7 +17,7 @@ export abstract class Control {
   abstract update(): void;
 }
 
-export abstract class BlocKControl {
+export abstract class NodeControl {
   node!: Node;
   control!: Control;
 

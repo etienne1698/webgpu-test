@@ -8,7 +8,6 @@ import { Scene } from "./models/scene";
 import { Simulation } from "./models/simulation";
 
 import { CubeMesh } from "./meshes/cube_mesh";
-import { SquareMesh } from "./meshes/square_mesh";
 
 import { ClickControl } from "./controls/click_control";
 import { KeyboardKeyHoldControl } from "./controls/keyboard_key_hold_control";
@@ -28,7 +27,6 @@ export {
   Scene,
   Simulation,
   CubeMesh,
-  SquareMesh,
   ClickControl,
   SlideNodeControl,
   KeyboardKeyHoldControl,

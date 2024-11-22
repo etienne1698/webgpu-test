@@ -12,7 +12,7 @@ export class Webgpu3DRenderer extends Renderer {
   multisampleTexture!: GPUTexture;
   pipeline!: GPURenderPipeline;
   vertexBufferLayout = {
-    arrayStride: 12 + 16,
+    arrayStride: 12 + 16 + 64,
     attributes: [
       {
         format: "float32x3" as GPUVertexFormat,
@@ -23,6 +23,26 @@ export class Webgpu3DRenderer extends Renderer {
         format: "float32x4" as GPUVertexFormat,
         offset: 12,
         shaderLocation: 1,
+      },
+      {
+        format: "float32x4", // Matrice - Ligne 1
+        offset: 28,
+        shaderLocation: 2,
+      },
+      {
+        format: "float32x4", // Matrice - Ligne 2
+        offset: 44,
+        shaderLocation: 3,
+      },
+      {
+        format: "float32x4", // Matrice - Ligne 3
+        offset: 60,
+        shaderLocation: 4,
+      },
+      {
+        format: "float32x4", // Matrice - Ligne 4
+        offset: 76,
+        shaderLocation: 5,
       },
     ],
   };
@@ -108,7 +128,7 @@ export class Webgpu3DRenderer extends Renderer {
       vertex: {
         module: shaderModule,
         entryPoint: "main",
-        buffers: [this.vertexBufferLayout],
+        buffers: [this.vertexBufferLayout as GPUVertexBufferLayout],
       },
       fragment: {
         module: shaderModule,
@@ -178,16 +198,12 @@ export class Webgpu3DRenderer extends Renderer {
     let verticesLength = 0;
 
     for (const node of scene.nodes.values()) {
+      if (!node.mesh) continue;
       for (const [i, v] of node.mesh.vertices.entries()) {
         verticesLength++;
-
-        vertexData.push(v[0]);
-        vertexData.push(v[1]);
-        vertexData.push(v[2]);
-        vertexData.push(node.mesh.verticiesColors[i][0]);
-        vertexData.push(node.mesh.verticiesColors[i][1]);
-        vertexData.push(node.mesh.verticiesColors[i][2]);
-        vertexData.push(node.mesh.verticiesColors[i][3]);
+        vertexData.push(...v);
+        vertexData.push(...node.mesh.verticiesColors[i]);
+        vertexData.push(...node.transform);
       }
     }
     const vertexBuffer = this.device.createBuffer({

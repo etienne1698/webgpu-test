@@ -33,7 +33,7 @@ export class ClickControl extends Control {
     );
 
     for (const node of this.scene.nodes.values()) {
-      if (raycaster.isRayIntersect(node.mesh)) {
+      if (raycaster.isRayIntersect(node)) {
         this.onClick(node, e);
       }
     }
