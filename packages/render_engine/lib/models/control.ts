@@ -2,7 +2,7 @@ import { Node } from "./node";
 import { Camera } from "./camera";
 import { Scene } from "./scene";
 
-export abstract class Control {
+export abstract class Control extends Node {
   scene!: Scene;
   camera!: Camera;
   canvas!: HTMLCanvasElement;
@@ -15,23 +15,4 @@ export abstract class Control {
   abstract disconnect(): Promise<void>;
 
   abstract update(): void;
-}
-
-export abstract class NodeControl {
-  node!: Node;
-  control!: Control;
-
-  connect(
-    scene: Scene,
-    camera: Camera,
-    canvas: HTMLCanvasElement,
-    node: Node
-  ) {
-    this.node = node;
-    this.control.connect(scene, camera, canvas);
-  }
-
-  disconnect() {
-    this.control.disconnect();
-  }
 }

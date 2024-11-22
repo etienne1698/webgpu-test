@@ -1,9 +1,9 @@
 import { Control } from "../models/control";
 import { Node } from "../models/node";
-import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import { Raycaster } from "../models/raycaster";
+import { MeshInstance } from "../nodes/mesh_instance";
 
 type ClickControlAction = (node: Node, event: MouseEvent) => void;
 
@@ -33,7 +33,7 @@ export class ClickControl extends Control {
     );
 
     this.scene.traverseNodeTree((node) => {
-      if (!node.mesh) return;
+      if (!(node instanceof MeshInstance)) return;
       if (raycaster.isRayIntersect(node)) {
         this.onClick(node, e);
       }

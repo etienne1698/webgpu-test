@@ -2,6 +2,7 @@ import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import shaderCode from "../shaders/shader.wgsl?raw";
 import { Renderer } from "../models/renderer";
+import { MeshInstance } from "../nodes/mesh_instance";
 
 export class Webgpu3DRenderer extends Renderer {
   device!: GPUDevice;
@@ -198,7 +199,7 @@ export class Webgpu3DRenderer extends Renderer {
     let verticesLength = 0;
 
     scene.traverseNodeTree((node) => {
-      if (!node.mesh) return;
+      if (!(node instanceof MeshInstance)) return;
       for (const [i, v] of node.mesh.vertices.entries()) {
         verticesLength++;
         vertexData.push(...v);

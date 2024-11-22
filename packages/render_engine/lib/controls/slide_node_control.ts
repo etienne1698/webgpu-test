@@ -45,7 +45,6 @@ export class SlideNodeControl extends Control {
     );
 
     this.scene.traverseNodeTree((node) => {
-      if (!node.mesh) return;
       if (raycaster.isRayIntersect(node)) {
         this.currentNodeSelected = node;
         this.oldCoord = { x: e.clientX, y: e.clientY };

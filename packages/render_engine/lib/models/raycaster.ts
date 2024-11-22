@@ -1,12 +1,14 @@
 import { mat4, vec2, vec3, vec4 } from "gl-matrix";
 import { Camera } from "./camera";
 import { Node } from "./node";
+import { MeshInstance } from "../nodes/mesh_instance";
 
 export class Raycaster {
   origin?: vec3;
   direction?: vec3;
 
   isRayIntersect(node: Node): boolean {
+    if (!(node instanceof MeshInstance)) return false;
     if (!this.origin || !this.direction) return false;
     const { boxMin, boxMax } = node.computeAABB();
 

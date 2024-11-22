@@ -3,31 +3,33 @@ import { Control } from "./control";
 import { Node } from "./node";
 
 export class Scene {
-  constructor(
-    public nodes = new Map<string, Node>([]),
-    public controls: Control[] = []
-  ) {}
+  constructor(public nodes = new Map<string, Node>([])) {}
 
   traverseNodeTree(callback: (node: Node) => void) {
     for (const node of this.nodes.values()) {
-      node.traverseTree(callback) 
+      node.traverseTree(callback);
     }
   }
 
   connectControls(camera: Camera, canvas: HTMLCanvasElement) {
-    this.controls.forEach((control) => {
-      control.connect(this, camera, canvas);
+    this.nodes.forEach((node) => {
+      if (!(node instanceof Control)) return;
+      node.connect(this, camera, canvas);
     });
   }
 
   disconnectControls() {
-    this.controls.forEach((control) => {
-      control.disconnect();
+    this.nodes.forEach((node) => {
+      if (!(node instanceof Control)) return;
+      node.disconnect();
     });
   }
 
   update() {
-    this.controls.forEach((control) => control.update());
+    this.nodes.forEach((node) => {
+      if (!(node instanceof Control)) return;
+      node.update();
+    });
   }
 
   add(nodeName: string, node: Node) {
