@@ -1,12 +1,11 @@
 import { Control } from "../models/control";
 import { Node } from "../models/node";
-import { Mesh } from "../models/mesh";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import { vec3 } from "gl-matrix";
 import { Raycaster } from "../models/raycaster";
 
-type SlideNodeAction = (node: Node, mesh: Mesh) => void;
+type SlideNodeAction = (node: Node) => void;
 
 export class SlideNodeControl extends Control {
   onSlide?: SlideNodeAction;
@@ -15,7 +14,6 @@ export class SlideNodeControl extends Control {
   oldCoord = { x: 0, y: 0 };
 
   currentNodeSelected?: Node;
-  currentMeshSelected?: Mesh;
 
   constructor(onSlide?: SlideNodeAction) {
     super();
@@ -28,7 +26,6 @@ export class SlideNodeControl extends Control {
 
   handleMouseUp() {
     this.currentNodeSelected = undefined;
-    this.currentMeshSelected = undefined;
 
     this.coord = { x: 0, y: 0 };
     this.oldCoord = { x: 0, y: 0 };
@@ -50,7 +47,6 @@ export class SlideNodeControl extends Control {
     for (const node of this.scene.nodes.values()) {
       if (raycaster.isRayIntersect(node.mesh)) {
         this.currentNodeSelected = node;
-        this.currentMeshSelected = node.mesh;
         this.oldCoord = { x: e.clientX, y: e.clientY };
         this.coord = { x: e.clientX, y: e.clientY };
       }
@@ -58,7 +54,7 @@ export class SlideNodeControl extends Control {
   }
 
   handleMouseMove(e: MouseEvent) {
-    if (!this.currentMeshSelected || !this.currentNodeSelected) return;
+    if (!this.currentNodeSelected) return;
     this.coord = { x: e.clientX, y: e.clientY };
   }
 
@@ -77,7 +73,7 @@ export class SlideNodeControl extends Control {
 
   update() {
     if (!this.onSlide) return;
-    if (this.currentNodeSelected && this.currentMeshSelected) {
+    if (this.currentNodeSelected) {
       const deltaX = this.coord.x - this.oldCoord.x;
       const deltaY = this.coord.y - this.oldCoord.y;
 
