@@ -197,15 +197,15 @@ export class Webgpu3DRenderer extends Renderer {
     const vertexData: number[] = [];
     let verticesLength = 0;
 
-    for (const node of scene.nodes.values()) {
-      if (!node.mesh) continue;
+    scene.traverseNodeTree((node) => {
+      if (!node.mesh) return;
       for (const [i, v] of node.mesh.vertices.entries()) {
         verticesLength++;
         vertexData.push(...v);
         vertexData.push(...node.mesh.verticiesColors[i]);
         vertexData.push(...node.transform);
       }
-    }
+    });
     const vertexBuffer = this.device.createBuffer({
       label: "Mesh vertices",
       size: 4 * vertexData.length,

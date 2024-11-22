@@ -8,6 +8,12 @@ export class Scene {
     public controls: Control[] = []
   ) {}
 
+  traverseNodeTree(callback: (node: Node) => void) {
+    for (const node of this.nodes.values()) {
+      node.traverseTree(callback) 
+    }
+  }
+
   connectControls(camera: Camera, canvas: HTMLCanvasElement) {
     this.controls.forEach((control) => {
       control.connect(this, camera, canvas);

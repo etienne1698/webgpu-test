@@ -44,13 +44,14 @@ export class SlideNodeControl extends Control {
       this.camera
     );
 
-    for (const node of this.scene.nodes.values()) {
+    this.scene.traverseNodeTree((node) => {
+      if (!node.mesh) return;
       if (raycaster.isRayIntersect(node)) {
         this.currentNodeSelected = node;
         this.oldCoord = { x: e.clientX, y: e.clientY };
         this.coord = { x: e.clientX, y: e.clientY };
       }
-    }
+    });
   }
 
   handleMouseMove(e: MouseEvent) {

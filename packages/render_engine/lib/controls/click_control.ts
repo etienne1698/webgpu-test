@@ -8,7 +8,7 @@ import { Raycaster } from "../models/raycaster";
 type ClickControlAction = (node: Node, event: MouseEvent) => void;
 
 export class ClickControl extends Control {
-  onClick?: ClickControlAction = () => {};
+  onClick: ClickControlAction = () => {};
 
   constructor(onClick: ClickControlAction) {
     super();
@@ -32,11 +32,12 @@ export class ClickControl extends Control {
       this.camera
     );
 
-    for (const node of this.scene.nodes.values()) {
+    this.scene.traverseNodeTree((node) => {
+      if (!node.mesh) return;
       if (raycaster.isRayIntersect(node)) {
         this.onClick(node, e);
       }
-    }
+    });
   }
 
   connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {

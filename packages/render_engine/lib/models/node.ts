@@ -55,4 +55,9 @@ export class Node {
   get(nodeName: string) {
     return this.children.get(nodeName);
   }
+
+  traverseTree(callback: (node: Node) => void) {
+    callback(this);
+    this.children.forEach((child) => child.traverseTree(callback));
+  }
 }
