@@ -5,7 +5,7 @@ import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import { Raycaster } from "../models/raycaster";
 
-type ClickControlAction = (node: Node, mesh: Mesh, event: MouseEvent) => void;
+type ClickControlAction = (node: Node, event: MouseEvent) => void;
 
 export class ClickControl extends Control {
   onClick?: ClickControlAction = () => {};
@@ -20,7 +20,6 @@ export class ClickControl extends Control {
   private handleMouseUp(e: MouseEvent) {
     if (!this.onClick) return;
 
-    
     const canvasRect = this.canvas.getBoundingClientRect();
     const normalizedX =
       ((e.clientX - canvasRect.left) / canvasRect.width) * 2 - 1;
@@ -28,13 +27,14 @@ export class ClickControl extends Control {
       ((e.clientY - canvasRect.top) / canvasRect.height) * 2 -
       1
     );
-    const raycaster = Raycaster.fromCamera([normalizedX, normalizedY], this.camera);
+    const raycaster = Raycaster.fromCamera(
+      [normalizedX, normalizedY],
+      this.camera
+    );
 
     for (const node of this.scene.nodes.values()) {
-      for (const mesh of node.meshes) {
-        if (raycaster.isRayIntersect(mesh)) {
-          this.onClick(node, mesh, e);
-        }
+      if (raycaster.isRayIntersect(node.mesh)) {
+        this.onClick(node, e);
       }
     }
   }

@@ -42,16 +42,17 @@ export class SlideNodeControl extends Control {
       ((e.clientY - canvasRect.top) / canvasRect.height) * 2 -
       1
     );
-    const raycaster = Raycaster.fromCamera([normalizedX, normalizedY], this.camera);
+    const raycaster = Raycaster.fromCamera(
+      [normalizedX, normalizedY],
+      this.camera
+    );
 
     for (const node of this.scene.nodes.values()) {
-      for (const mesh of node.meshes) {
-        if (raycaster.isRayIntersect(mesh)) {
-          this.currentNodeSelected = node;
-          this.currentMeshSelected = mesh;
-          this.oldCoord = { x: e.clientX, y: e.clientY };
-          this.coord = { x: e.clientX, y: e.clientY };
-        }
+      if (raycaster.isRayIntersect(node.mesh)) {
+        this.currentNodeSelected = node;
+        this.currentMeshSelected = node.mesh;
+        this.oldCoord = { x: e.clientX, y: e.clientY };
+        this.coord = { x: e.clientX, y: e.clientY };
       }
     }
   }

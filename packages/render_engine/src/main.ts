@@ -26,9 +26,8 @@ function generateRandomCubes(
       Math.random() * bounds.y - bounds.y / 2, // Position Y aléatoire
       Math.random() * bounds.z - bounds.z / 2, // Position Z aléatoire
     ];
-    const color = randomColor();
-    const cubeMesh = new CubeMesh(position as CubeMesh["vertices"][0], [color]);
-    const node = new Node([cubeMesh]);
+    const cubeMesh = new CubeMesh(position as CubeMesh["vertices"][0], [randomColor()]);
+    const node = new Node(cubeMesh);
     scene.addNode(`cube${Math.random()}`, node);
   }
 }
@@ -45,9 +44,7 @@ const app = new Simulation(renderer, {
   canvas,
   controls: [
     new ClickControl((node) => {
-      node.meshes[0].colors = new CubeMesh([0, 0, 0]).vertices.map(
-        randomColor
-      );
+      node.mesh.colors = new CubeMesh([0, 0, 0]).vertices.map(randomColor);
     }),
     new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
     new SlideNodeControl((node) => {}),

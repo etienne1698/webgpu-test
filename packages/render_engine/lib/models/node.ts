@@ -2,35 +2,25 @@ import { vec3 } from "gl-matrix";
 import { Mesh } from "./mesh";
 
 export class Node {
-  constructor(public meshes: Mesh[]) {}
+  constructor(public mesh: Mesh) {}
 
   translate(vector: vec3) {
-    for (const mesh of this.meshes) {
-      mesh.translate(vector);
-    }
+    this.mesh.translate(vector);
   }
 
   rotateX(rad: number) {
-    for (const mesh of this.meshes) {
-      mesh.rotateX(rad);
-    }
+    this.mesh.rotateX(rad);
   }
 
   rotateY(rad: number) {
-    for (const mesh of this.meshes) {
-      mesh.rotateY(rad);
-    }
+    this.mesh.rotateY(rad);
   }
 
   rotateZ(rad: number) {
-    for (const mesh of this.meshes) {
-      mesh.rotateZ(rad);
-    }
+    this.mesh.rotateZ(rad);
   }
 
   scale(s: vec3 | number) {
-    for (const mesh of this.meshes) {
-      mesh.scale(typeof s === "number" ? [s, s, s] : s);
-    }
+    this.mesh.scale(typeof s === "number" ? [s, s, s] : s);
   }
 }

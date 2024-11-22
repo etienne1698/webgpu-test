@@ -60,7 +60,6 @@ export class Webgpu3DRenderer extends Renderer {
       code: shaderCode,
     });
 
-
     this.multisampleTexture = this.device.createTexture({
       format: this.context.getCurrentTexture().format,
       usage: GPUTextureUsage.RENDER_ATTACHMENT,
@@ -78,7 +77,7 @@ export class Webgpu3DRenderer extends Renderer {
       ],
       format: "depth24plus",
       usage: GPUTextureUsage.RENDER_ATTACHMENT,
-      sampleCount: 4
+      sampleCount: 4,
     });
 
     this.pipeline = this.device.createRenderPipeline({
@@ -179,18 +178,16 @@ export class Webgpu3DRenderer extends Renderer {
     let verticesLength = 0;
 
     for (const node of scene.nodes.values()) {
-      for (const mesh of node.meshes.values()) {
-        for (const [i, v] of mesh.vertices.entries()) {
-          verticesLength++;
+      for (const [i, v] of node.mesh.vertices.entries()) {
+        verticesLength++;
 
-          vertexData.push(v[0]);
-          vertexData.push(v[1]);
-          vertexData.push(v[2]);
-          vertexData.push(mesh.verticiesColors[i][0]);
-          vertexData.push(mesh.verticiesColors[i][1]);
-          vertexData.push(mesh.verticiesColors[i][2]);
-          vertexData.push(mesh.verticiesColors[i][3]);
-        }
+        vertexData.push(v[0]);
+        vertexData.push(v[1]);
+        vertexData.push(v[2]);
+        vertexData.push(node.mesh.verticiesColors[i][0]);
+        vertexData.push(node.mesh.verticiesColors[i][1]);
+        vertexData.push(node.mesh.verticiesColors[i][2]);
+        vertexData.push(node.mesh.verticiesColors[i][3]);
       }
     }
     const vertexBuffer = this.device.createBuffer({
