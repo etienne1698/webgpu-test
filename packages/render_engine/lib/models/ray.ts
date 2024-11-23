@@ -1,35 +1,15 @@
 import { mat4, vec2, vec3, vec4 } from "gl-matrix";
-import { Camera } from "./camera";
 import { Node } from "./node";
-import { MeshInstance } from "../nodes/mesh_instance";
+import { Camera } from "./camera";
+import { Shape } from "../nodes/shape";
 
-export class Raycaster {
+export class Ray {
   origin?: vec3;
   direction?: vec3;
 
-  isRayIntersect(node: Node): boolean {
-    if (!(node instanceof MeshInstance)) return false;
-    if (!this.origin || !this.direction) return false;
-    const { boxMin, boxMax } = node.computeAABB();
-
-    let tmin = (boxMin[0] - this.origin[0]) / this.direction[0];
-    let tmax = (boxMax[0] - this.origin[0]) / this.direction[0];
-    if (tmin > tmax) [tmin, tmax] = [tmax, tmin];
-
-    let tymin = (boxMin[1] - this.origin[1]) / this.direction[1];
-    let tymax = (boxMax[1] - this.origin[1]) / this.direction[1];
-    if (tymin > tymax) [tymin, tymax] = [tymax, tymin];
-
-    if (tmin > tymax || tymin > tmax) return false;
-    tmin = Math.max(tmin, tymin);
-    tmax = Math.min(tmax, tymax);
-
-    let tzmin = (boxMin[2] - this.origin[2]) / this.direction[2];
-    let tzmax = (boxMax[2] - this.origin[2]) / this.direction[2];
-    if (tzmin > tzmax) [tzmin, tzmax] = [tzmax, tzmin];
-
-    if (tmin > tzmax || tzmin > tmax) return false;
-    return true;
+  isIntersect(node: Node): boolean {
+    if (!(node instanceof Shape)) return false;
+    return node.isRayIntersect(this);
   }
 
   /**
@@ -69,7 +49,7 @@ export class Raycaster {
   }
 
   static fromCamera(coords: vec2, camera: Camera) {
-    const r = new Raycaster();
+    const r = new Ray();
     r.setFromCamera(coords, camera);
     return r;
   }

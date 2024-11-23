@@ -3,7 +3,7 @@ import { Node } from "../models/node";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import { vec3 } from "gl-matrix";
-import { Raycaster } from "../models/raycaster";
+import { Ray } from "../models/ray";
 
 type SlideNodeAction = (node: Node) => void;
 
@@ -39,14 +39,11 @@ export class SlideNodeControl extends Control {
       ((e.clientY - canvasRect.top) / canvasRect.height) * 2 -
       1
     );
-    const raycaster = Raycaster.fromCamera(
-      [normalizedX, normalizedY],
-      this.camera
-    );
+    const ray = Ray.fromCamera([normalizedX, normalizedY], this.camera);
 
     this.scene.traverseNodeTree((node) => {
-      if (raycaster.isRayIntersect(node)) {
-        this.currentNodeSelected = node;
+      if (ray.isIntersect(node)) {
+        this.currentNodeSelected = node.parent!;
         this.oldCoord = { x: e.clientX, y: e.clientY };
         this.coord = { x: e.clientX, y: e.clientY };
       }

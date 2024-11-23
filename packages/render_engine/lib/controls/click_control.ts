@@ -2,8 +2,7 @@ import { Control } from "../nodes/control";
 import { Node } from "../models/node";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
-import { Raycaster } from "../models/raycaster";
-import { MeshInstance } from "../nodes/mesh_instance";
+import { Ray } from "../models/ray";
 
 type ClickControlAction = (node: Node, event: MouseEvent) => void;
 
@@ -27,15 +26,11 @@ export class ClickControl extends Control {
       ((e.clientY - canvasRect.top) / canvasRect.height) * 2 -
       1
     );
-    const raycaster = Raycaster.fromCamera(
-      [normalizedX, normalizedY],
-      this.camera
-    );
+    const ray = Ray.fromCamera([normalizedX, normalizedY], this.camera);
 
     this.scene.traverseNodeTree((node) => {
-      if (!(node instanceof MeshInstance)) return;
-      if (raycaster.isRayIntersect(node)) {
-        this.onClick(node, e);
+      if (ray.isIntersect(node)) {
+        this.onClick(node.parent!, e);
       }
     });
   }

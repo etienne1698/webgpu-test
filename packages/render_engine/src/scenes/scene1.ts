@@ -6,9 +6,9 @@ import {
   randomColor,
   Scene,
   SlideNodeControl,
+  MeshInstance,
 } from "../../lib/main";
 import { MenuControl } from "../controls/menu_control";
-import { MeshInstance } from "../../lib/nodes/mesh_instance";
 import { generateRandomCubes } from "../utils";
 
 const menu = document.getElementById("menu")!;

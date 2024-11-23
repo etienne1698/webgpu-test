@@ -1,6 +1,6 @@
 export class Node {
   children = new Map<string, Node>();
-  parent?: Node;
+   parent?: Node;
 
   constructor() {}
 
