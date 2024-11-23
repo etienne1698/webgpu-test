@@ -1,10 +1,11 @@
 import { Simulation, Webgpu3DRenderer } from "../lib/main";
-
 import scene1 from "./scenes/scene1";
 
 const canvas = document.querySelector<HTMLCanvasElement>("#app-canvas")!;
 
-const renderer = new Webgpu3DRenderer(canvas);
+const device = await Webgpu3DRenderer.getDefaultDevice();
+
+const renderer = new Webgpu3DRenderer(device, canvas);
 
 const app = new Simulation(renderer, {
   scene: scene1,

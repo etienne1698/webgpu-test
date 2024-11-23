@@ -33,7 +33,6 @@ export class Simulation {
         this.canvas.clientWidth / this.canvas.clientHeight
       );
     });
-    await this.renderer.init();
   }
 
   startRenderLoop() {

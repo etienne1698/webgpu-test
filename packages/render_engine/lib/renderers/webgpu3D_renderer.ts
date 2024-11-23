@@ -5,7 +5,6 @@ import { Renderer } from "../models/renderer";
 import { MeshInstance } from "../nodes/mesh_instance";
 
 export class Webgpu3DRenderer extends Renderer {
-  device!: GPUDevice;
   context!: GPUCanvasContext;
   cameraBuffer!: GPUBuffer;
 
@@ -48,22 +47,8 @@ export class Webgpu3DRenderer extends Renderer {
     ],
   };
 
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
-  }
-
-  async init() {
-    if (!navigator.gpu) {
-      throw new Error("WebGPU not supported on this browser.");
-    }
-
-    const adapter = await navigator.gpu.requestAdapter();
-    if (!adapter) {
-      throw new Error("No appropriate GPUAdapter found.");
-    }
-
-    this.device = await adapter.requestDevice();
-
+  constructor(public device: GPUDevice, public canvas: HTMLCanvasElement) {
+    super();
     const context = this.canvas.getContext("webgpu");
     if (!context) {
       throw new Error("No context.");
@@ -150,6 +135,19 @@ export class Webgpu3DRenderer extends Renderer {
       size: 64,
       usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
     });
+  }
+
+  static async getDefaultDevice() {
+    if (!navigator.gpu) {
+      throw new Error("WebGPU not supported on this browser.");
+    }
+
+    const adapter = await navigator.gpu.requestAdapter();
+    if (!adapter) {
+      throw new Error("No appropriate GPUAdapter found.");
+    }
+
+    return await adapter.requestDevice();
   }
 
   async render(scene: Scene, camera: Camera) {
