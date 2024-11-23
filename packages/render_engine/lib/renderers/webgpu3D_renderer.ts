@@ -10,6 +10,7 @@ export class Webgpu3DRenderer extends Renderer {
 
   depthTexture!: GPUTexture;
   multisampleTexture!: GPUTexture;
+
   pipeline!: GPURenderPipeline;
   vertexBufferLayout = {
     arrayStride: 12 + 16,
@@ -164,13 +165,16 @@ export class Webgpu3DRenderer extends Renderer {
     );
 
     scene.traverseNodeTree((node) => {
+      if (!(node instanceof Mesh)) return;
+      if (!node.material.visible) return;
+
       const vertexData: number[] = [];
       let verticesLength = 0;
-      if (!(node instanceof Mesh)) return;
+
       for (const [i, v] of node.geometry.vertices.entries()) {
         verticesLength++;
         vertexData.push(...v);
-        vertexData.push(...node.geometry.verticiesColors[i]);
+        vertexData.push(...[.5, .2, .6, 1]);
       }
       const vertexBuffer = this.device.createBuffer({
         label: "Geometry vertices",

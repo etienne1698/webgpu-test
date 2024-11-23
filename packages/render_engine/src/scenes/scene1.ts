@@ -1,9 +1,7 @@
 import {
   ClickControl,
-  CubeGeometry,
   KeyboardKeyHoldControl,
   Node,
-  randomColor,
   Scene,
   SlideNodeControl,
   Mesh,
@@ -22,9 +20,7 @@ const scene1 = new Scene(
       "contol-1",
       new ClickControl((node) => {
         if (!(node instanceof Mesh)) return;
-        node.geometry.colors = new CubeGeometry([[0, 0, 0, 0]]).vertices.map(
-          randomColor
-        );
+        node.material.visible = !node.material.visible;
       }),
     ],
     ["contol-2", new SlideNodeControl((node) => {})],

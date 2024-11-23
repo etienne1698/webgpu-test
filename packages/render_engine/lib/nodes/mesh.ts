@@ -1,14 +1,17 @@
 import { mat4 } from "gl-matrix";
-import { Geometry } from "../models/geometry";
 import { Node3D } from "./node_3d";
+import { Geometry } from "../models/geometry";
+import { Material } from "../models/material";
 
 export type MeshOptions = {
   geometry: Geometry;
+  material: Material;
   transform?: mat4;
 };
 
 export class Mesh extends Node3D {
   geometry!: Geometry;
+  material!: Material;
 
   constructor(options: MeshOptions) {
     super();

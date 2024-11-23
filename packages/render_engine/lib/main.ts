@@ -6,8 +6,9 @@ import { Ray } from "./models/ray";
 import { Renderer } from "./models/renderer";
 import { Scene } from "./models/scene";
 import { Simulation } from "./models/simulation";
+import { Material } from "./models/material";
 
-import { CubeGeometry } from "./geometry/cube_geometry";
+import { CubeGeometry } from "./geometries/cube_geometry";
 
 import { ClickControl } from "./controls/click_control";
 import { KeyboardKeyHoldControl } from "./controls/keyboard_key_hold_control";
@@ -39,4 +40,5 @@ export {
   Webgpu3DRenderer,
   Mesh,
   AABBShape,
+  Material,
 };

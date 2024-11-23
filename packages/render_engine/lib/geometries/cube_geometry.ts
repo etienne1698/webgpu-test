@@ -1,8 +1,7 @@
-import { vec3, vec4 } from "gl-matrix";
 import { Geometry } from "../models/geometry";
 
 export class CubeGeometry extends Geometry {
-  constructor(colors: [vec4]) {
+  constructor() {
     super(
       [
         [-1, -1, 1],
@@ -46,8 +45,7 @@ export class CubeGeometry extends Geometry {
         [-1, -1, -1],
         [1, -1, -1],
         [1, -1, 1],
-      ],
-      colors
+      ]
     );
   }
 }
