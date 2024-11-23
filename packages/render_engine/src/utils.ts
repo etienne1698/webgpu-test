@@ -1,10 +1,10 @@
 import { mat4, vec3 } from "gl-matrix";
 import {
-  CubeMesh,
+  CubeGeometry,
   Node,
   randomColor,
   Scene,
-  MeshInstance,
+  Mesh,
   AABBShape,
 } from "../lib/main";
 
@@ -20,8 +20,8 @@ export function generateRandomCubes(
       Math.random() * bounds.y - bounds.y / 2, // Position Y aléatoire
       Math.random() * bounds.z - bounds.z / 2, // Position Z aléatoire
     ];
-    const node = new MeshInstance({
-      mesh: new CubeMesh([randomColor()]),
+    const node = new Mesh({
+      geometry: new CubeGeometry([randomColor()]),
       transform: mat4.translate(mat4.create(), mat4.create(), position),
     });
     node.addChild("shape", new AABBShape());

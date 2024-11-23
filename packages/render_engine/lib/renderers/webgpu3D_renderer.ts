@@ -2,7 +2,7 @@ import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import shaderCode from "../shaders/shader.wgsl?raw";
 import { Renderer } from "../models/renderer";
-import { MeshInstance } from "../nodes/mesh_instance";
+import { Mesh } from "../nodes/mesh";
 
 export class Webgpu3DRenderer extends Renderer {
   context!: GPUCanvasContext;
@@ -12,7 +12,7 @@ export class Webgpu3DRenderer extends Renderer {
   multisampleTexture!: GPUTexture;
   pipeline!: GPURenderPipeline;
   vertexBufferLayout = {
-    arrayStride: 12 + 16 + 64,
+    arrayStride: 12 + 16,
     attributes: [
       {
         format: "float32x3" as GPUVertexFormat,
@@ -23,26 +23,6 @@ export class Webgpu3DRenderer extends Renderer {
         format: "float32x4" as GPUVertexFormat,
         offset: 12,
         shaderLocation: 1,
-      },
-      {
-        format: "float32x4", // Matrice - Ligne 1
-        offset: 28,
-        shaderLocation: 2,
-      },
-      {
-        format: "float32x4", // Matrice - Ligne 2
-        offset: 44,
-        shaderLocation: 3,
-      },
-      {
-        format: "float32x4", // Matrice - Ligne 3
-        offset: 60,
-        shaderLocation: 4,
-      },
-      {
-        format: "float32x4", // Matrice - Ligne 4
-        offset: 76,
-        shaderLocation: 5,
       },
     ],
   };
@@ -87,7 +67,7 @@ export class Webgpu3DRenderer extends Renderer {
     });
 
     this.pipeline = this.device.createRenderPipeline({
-      label: "Cell pipeline",
+      label: "pipeline",
       depthStencil: {
         format: "depth24plus",
         depthWriteEnabled: true,
@@ -100,10 +80,15 @@ export class Webgpu3DRenderer extends Renderer {
         label: "vertexLayout",
         bindGroupLayouts: [
           this.device.createBindGroupLayout({
-            label: "Cell Bind Group Layout",
+            label: "Bind Group Layout",
             entries: [
               {
                 binding: 0,
+                visibility: GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE,
+                buffer: {},
+              },
+              {
+                binding: 1,
                 visibility: GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE,
                 buffer: {},
               },
@@ -172,53 +157,68 @@ export class Webgpu3DRenderer extends Renderer {
     });
     pass.setPipeline(this.pipeline);
 
-    pass.setBindGroup(
-      0,
-      this.device.createBindGroup({
-        layout: this.pipeline.getBindGroupLayout(0),
-        entries: [
-          {
-            binding: 0,
-            resource: {
-              buffer: this.cameraBuffer,
-            },
-          },
-        ],
-      })
-    );
-
     this.device.queue.writeBuffer(
       this.cameraBuffer,
       0,
       new Float32Array(camera.viewProjectionMatrix)
     );
 
-    const vertexData: number[] = [];
-    let verticesLength = 0;
-
     scene.traverseNodeTree((node) => {
-      if (!(node instanceof MeshInstance)) return;
-      for (const [i, v] of node.mesh.vertices.entries()) {
+      const vertexData: number[] = [];
+      let verticesLength = 0;
+      if (!(node instanceof Mesh)) return;
+      for (const [i, v] of node.geometry.vertices.entries()) {
         verticesLength++;
         vertexData.push(...v);
-        vertexData.push(...node.mesh.verticiesColors[i]);
-        vertexData.push(...node.transform);
+        vertexData.push(...node.geometry.verticiesColors[i]);
       }
-    });
-    const vertexBuffer = this.device.createBuffer({
-      label: "Mesh vertices",
-      size: 4 * vertexData.length,
-      usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
-    });
+      const vertexBuffer = this.device.createBuffer({
+        label: "Geometry vertices",
+        size: 4 * vertexData.length,
+        usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
+      });
 
-    this.device.queue.writeBuffer(
-      vertexBuffer,
-      0,
-      new Float32Array(vertexData)
-    );
-    pass.setVertexBuffer(0, vertexBuffer);
+      const meshBuffer = this.device.createBuffer({
+        size: 64,
+        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+      });
 
-    pass.draw(verticesLength);
+      pass.setBindGroup(
+        0,
+        this.device.createBindGroup({
+          layout: this.pipeline.getBindGroupLayout(0),
+          entries: [
+            {
+              binding: 0,
+              resource: {
+                buffer: this.cameraBuffer,
+              },
+            },
+            {
+              binding: 1,
+              resource: {
+                buffer: meshBuffer,
+              },
+            },
+          ],
+        })
+      );
+
+      this.device.queue.writeBuffer(
+        meshBuffer,
+        0,
+        new Float32Array(node.transform)
+      );
+
+      this.device.queue.writeBuffer(
+        vertexBuffer,
+        0,
+        new Float32Array(vertexData)
+      );
+      pass.setVertexBuffer(0, vertexBuffer);
+
+      pass.draw(verticesLength);
+    });
 
     pass.end();
 

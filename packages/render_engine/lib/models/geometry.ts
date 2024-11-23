@@ -1,7 +1,7 @@
 import { vec3, vec4 } from "gl-matrix";
 import { colors } from "../helpers/vec4_colots";
 
-export abstract class Mesh {
+export abstract class Geometry {
   constructor(
     public vertices: vec3[],
     public colors: vec4[] = [[0, 0, 0, 0]]

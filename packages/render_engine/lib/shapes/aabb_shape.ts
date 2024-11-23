@@ -1,17 +1,17 @@
 import { vec3 } from "gl-matrix";
 import { Shape } from "../nodes/shape";
-import { MeshInstance } from "../nodes/mesh_instance";
+import { Mesh } from "../nodes/mesh";
 import { Ray } from "../main";
 
 export class AABBShape extends Shape {
   computeAABB(): { boxMin: vec3; boxMax: vec3 } {
-    if (!this.parent || !(this.parent instanceof MeshInstance))
-      throw new Error("parent is not MeshInstance");
+    if (!this.parent || !(this.parent instanceof Mesh))
+      throw new Error("parent is not Mesh");
 
     const boxMin: vec3 = [Infinity, Infinity, Infinity];
     const boxMax: vec3 = [-Infinity, -Infinity, -Infinity];
 
-    for (const vertex of this.parent.mesh.vertices) {
+    for (const vertex of this.parent.geometry.vertices) {
       const vertexTransformed = vec3.transformMat4(
         vec3.create(),
         vertex,

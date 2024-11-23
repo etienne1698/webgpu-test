@@ -1,12 +1,12 @@
 import {
   ClickControl,
-  CubeMesh,
+  CubeGeometry,
   KeyboardKeyHoldControl,
   Node,
   randomColor,
   Scene,
   SlideNodeControl,
-  MeshInstance,
+  Mesh,
 } from "../../lib/main";
 import { MenuControl } from "../controls/menu_control";
 import { generateRandomCubes } from "../utils";
@@ -21,8 +21,8 @@ const scene1 = new Scene(
     [
       "contol-1",
       new ClickControl((node) => {
-        if (!(node instanceof MeshInstance)) return;
-        node.mesh.colors = new CubeMesh([[0, 0, 0, 0]]).vertices.map(
+        if (!(node instanceof Mesh)) return;
+        node.geometry.colors = new CubeGeometry([[0, 0, 0, 0]]).vertices.map(
           randomColor
         );
       }),
