@@ -13,5 +13,5 @@ const app = new Simulation(renderer, {
 
 await app.init();
 
-app.camera.translate([0, 0, 30]);
+app.camera.translate([0, 0, 50]);
 app.run();
