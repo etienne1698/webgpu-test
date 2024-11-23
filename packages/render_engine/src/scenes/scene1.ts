@@ -1,6 +1,7 @@
 import {
   ClickControl,
   CubeMesh,
+  KeyboardKeyHoldControl,
   Node,
   randomColor,
   Scene,
@@ -34,6 +35,10 @@ const scene1 = new Scene(
         goBackward: btnBackward,
         rotateY: inputRotationY,
       }),
+    ],
+    [
+      "control-4",
+      new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
     ],
   ])
 );
