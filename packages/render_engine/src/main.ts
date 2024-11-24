@@ -19,3 +19,12 @@ await app.init();
 
 camera.translate([0, 15, 100]);
 app.run();
+
+// Prevent browser zoom
+document.addEventListener(
+  "wheel",
+  (e) => {
+    e.preventDefault();
+  },
+  { passive: false }
+);

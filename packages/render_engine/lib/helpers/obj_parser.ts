@@ -30,26 +30,25 @@ export namespace ObjParser {
       switch (words[0]) {
         case "f":
           for (let i = 2; i < words.length - 1; i++) {
-            // Triangle basé sur le premier sommet, et les suivants
             const indices = [
               words[1].split("/"),
               words[i].split("/"),
               words[i + 1].split("/"),
             ];
-
-            // Ajout des vertices
+    
             geometry.vertices.push(
               vertices[+indices[0][0] - 1],
               vertices[+indices[1][0] - 1],
               vertices[+indices[2][0] - 1]
             );
-
-            // Ajout des UVs (si disponibles)
-            geometry.uvMap.push(
-              uvMap[+indices[0][1] - 1],
-              uvMap[+indices[1][1] - 1],
-              uvMap[+indices[2][1] - 1]
-            );
+    
+            if (indices[0][1] && indices[1][1] && indices[2][1]) {
+              geometry.uvMap.push(
+                uvMap[+indices[0][1] - 1],
+                uvMap[+indices[1][1] - 1],
+                uvMap[+indices[2][1] - 1]
+              );
+            }
           }
           break;
         default:

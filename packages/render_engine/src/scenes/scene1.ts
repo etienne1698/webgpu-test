@@ -5,7 +5,6 @@ import {
   Mesh,
   BasicMaterial,
   Texture,
-  colorsRGBA,
   ObjParser,
   randomVec4RGBAColor,
 } from "../../lib/main";
