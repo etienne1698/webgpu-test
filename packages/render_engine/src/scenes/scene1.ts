@@ -20,7 +20,7 @@ const scene1 = new Scene(
       "contol-1",
       new ClickControl((node) => {
         if (!(node instanceof Mesh)) return;
-        node.material.visible = !node.material.visible;
+        node.material.isVisible = !node.material.isVisible;
       }),
     ],
     ["contol-2", new SlideNodeControl((node) => {})],

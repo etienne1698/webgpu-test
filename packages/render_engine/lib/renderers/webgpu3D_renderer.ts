@@ -12,8 +12,9 @@ export class Webgpu3DRenderer extends Renderer {
   multisampleTexture!: GPUTexture;
 
   pipeline!: GPURenderPipeline;
+
   vertexBufferLayout = {
-    arrayStride: 12 + 16,
+    arrayStride: 12 + 8,
     attributes: [
       {
         format: "float32x3" as GPUVertexFormat,
@@ -21,7 +22,7 @@ export class Webgpu3DRenderer extends Renderer {
         shaderLocation: 0,
       },
       {
-        format: "float32x4" as GPUVertexFormat,
+        format: "float32x2" as GPUVertexFormat,
         offset: 12,
         shaderLocation: 1,
       },
@@ -92,6 +93,16 @@ export class Webgpu3DRenderer extends Renderer {
                 binding: 1,
                 visibility: GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE,
                 buffer: {},
+              },
+              {
+                binding: 2,
+                visibility: GPUShaderStage.FRAGMENT,
+                sampler: {},
+              },
+              {
+                binding: 3,
+                visibility: GPUShaderStage.FRAGMENT,
+                texture: {},
               },
             ],
           }),
@@ -166,7 +177,7 @@ export class Webgpu3DRenderer extends Renderer {
 
     scene.traverseNodeTree((node) => {
       if (!(node instanceof Mesh)) return;
-      if (!node.material.visible) return;
+      if (!node.material.isVisible) return;
 
       const vertexData: number[] = [];
       let verticesLength = 0;
@@ -174,7 +185,7 @@ export class Webgpu3DRenderer extends Renderer {
       for (const [i, v] of node.geometry.vertices.entries()) {
         verticesLength++;
         vertexData.push(...v);
-        vertexData.push(...[.5, .2, .6, 1]);
+        vertexData.push(...node.uvMap![i]);
       }
       const vertexBuffer = this.device.createBuffer({
         label: "Geometry vertices",
@@ -186,6 +197,25 @@ export class Webgpu3DRenderer extends Renderer {
         size: 64,
         usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
       });
+
+      const texture = this.device.createTexture({
+        label: "node texture",
+        size: [node.material.texture.width, node.material.texture.height],
+        format: "rgba8unorm",
+        usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST,
+      });
+
+      const sampler = this.device.createSampler({});
+
+      this.device.queue.writeTexture(
+        { texture },
+        node.material.texture.data,
+        { bytesPerRow: node.material.texture.width * 4 },
+        {
+          width: node.material.texture.width,
+          height: node.material.texture.height,
+        }
+      );
 
       pass.setBindGroup(
         0,
@@ -204,6 +234,8 @@ export class Webgpu3DRenderer extends Renderer {
                 buffer: meshBuffer,
               },
             },
+            { binding: 2, resource: sampler },
+            { binding: 3, resource: texture.createView() },
           ],
         })
       );

@@ -5,7 +5,9 @@ import {
   Scene,
   Mesh,
   AABBShape,
-  Material,
+  BasicMaterial,
+  Texture,
+  randomVec4RGBAColor,
 } from "../lib/main";
 
 export function generateRandomCubes(
@@ -22,7 +24,56 @@ export function generateRandomCubes(
     ];
     const node = new Mesh({
       geometry: new CubeGeometry(),
-      material: new Material(),
+      material: new BasicMaterial({
+        texture: new Texture(
+          new Uint8Array([
+            ...randomVec4RGBAColor(),
+            ...randomVec4RGBAColor(),
+            ...randomVec4RGBAColor(),
+            ...randomVec4RGBAColor(),
+          ]),
+          2,
+          2
+        ),
+      }),
+      uvMap: [
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [0, 0],
+        [0, 1],
+        [1, 1],
+      ],
       transform: mat4.translate(mat4.create(), mat4.create(), position),
     });
     node.addChild("shape", new AABBShape());
