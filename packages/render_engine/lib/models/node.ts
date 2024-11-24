@@ -4,8 +4,11 @@ export class Node {
 
   uuid: string;
 
-  constructor() {
+  constructor(children?: Node[]) {
     this.uuid = crypto.randomUUID();
+    if (children) {
+      children.forEach((node) => this.add(node));
+    }
   }
 
   traverseTree(callback: (node: Node) => void) {

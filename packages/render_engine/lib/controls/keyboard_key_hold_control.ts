@@ -3,6 +3,7 @@ import { Camera } from "../models/camera";
 import { Control } from "../nodes/control";
 import { Scene } from "../models/scene";
 import { degeesToRadiant } from "../helpers/math";
+import { Node } from "../main";
 
 type KeyBinding = {
   [key: string]: (scene: Scene, camera: Camera) => void;
@@ -14,7 +15,7 @@ export class KeyboardKeyHoldControl extends Control {
 
   static get DEFAULT_KEY_BINDING() {
     const CAMERA_SPEED = 0.05;
-    const CAMERA_SPEED_RAD = degeesToRadiant(.25);
+    const CAMERA_SPEED_RAD = degeesToRadiant(0.25);
     return {
       up(scene, camera) {
         camera.translate([0, CAMERA_SPEED, 0]);
@@ -78,8 +79,13 @@ export class KeyboardKeyHoldControl extends Control {
     );
   }
 
-  async connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
-    super.connect(scene, camera, canvas);
+  async connect(
+    scene: Scene,
+    camera: Camera,
+    canvas: HTMLCanvasElement,
+    node: Node
+  ) {
+    super.connect(scene, camera, canvas, node);
     for (const key of Object.keys(this.keyBinding)) {
       this.bindHold(key);
     }

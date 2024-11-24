@@ -6,11 +6,21 @@ export abstract class Control extends Node {
   scene!: Scene;
   camera!: Camera;
   canvas!: HTMLCanvasElement;
+  node!: Node;
 
-  connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
+  constructor() {
+    super();
+  }
+
+  add() {
+    throw new Error("cannot add child to controls");
+  }
+
+  connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement, node: Node) {
     this.scene = scene;
     this.camera = camera;
     this.canvas = canvas;
+    this.node = node;
   }
   abstract disconnect(): Promise<void>;
 

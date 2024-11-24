@@ -55,8 +55,8 @@ export class SlideNodeControl extends Control {
     this.coord = { x: e.clientX, y: e.clientY };
   }
 
-  connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
-    super.connect(scene, camera, canvas);
+  connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement, node: Node) {
+    super.connect(scene, camera, canvas, node);
     this.canvas.addEventListener("mouseup", this.handleMouseUp, false);
     this.canvas.addEventListener("mousedown", this.handleMouseDown, false);
     this.canvas.addEventListener("mousemove", this.handleMouseMove, false);

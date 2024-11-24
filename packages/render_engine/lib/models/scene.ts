@@ -6,7 +6,7 @@ export class Scene extends Node {
   connectControls(camera: Camera, canvas: HTMLCanvasElement) {
     this.children.forEach((node) => {
       if (!(node instanceof Control)) return;
-      node.connect(this, camera, canvas);
+      node.connect(this, camera, canvas, node.parent!);
     });
   }
 

@@ -35,8 +35,8 @@ export class ClickControl extends Control {
     });
   }
 
-  connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement) {
-    super.connect(scene, camera, canvas);
+  connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement, node: Node) {
+    super.connect(scene, camera, canvas, node);
     this.canvas.addEventListener("mouseup", this.handleMouseUp, false);
   }
 
