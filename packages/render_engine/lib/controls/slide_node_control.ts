@@ -41,7 +41,7 @@ export class SlideNodeControl extends Control {
     );
     const ray = Ray.fromCamera([normalizedX, normalizedY], this.camera);
 
-    this.scene.traverseNodeTree((node) => {
+    this.scene.traverseTree((node) => {
       if (ray.isIntersect(node)) {
         this.currentNodeSelected = node.parent!;
         this.oldCoord = { x: e.clientX, y: e.clientY };

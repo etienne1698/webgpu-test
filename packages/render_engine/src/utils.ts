@@ -38,8 +38,8 @@ export function generateRandomCubes(
       }),
       transform: mat4.translate(mat4.create(), mat4.create(), position),
     });
-    node.addChild("shape", new AABBShape());
-    node0.addChild(`cube-${Math.random()}`, node);
+    node.add(new AABBShape());
+    node0.add(node);
   }
-  scene.add(`cube-${Math.random()}`, node0);
+  scene.add(node0);
 }

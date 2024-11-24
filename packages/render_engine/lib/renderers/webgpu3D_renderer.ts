@@ -175,7 +175,7 @@ export class Webgpu3DRenderer extends Renderer {
       new Float32Array(camera.viewProjectionMatrix)
     );
 
-    scene.traverseNodeTree((node) => {
+    scene.traverseTree((node) => {
       if (!(node instanceof Mesh)) return;
       if (!node.material.isVisible) return;
       if (!node.geometry.vertices) return;

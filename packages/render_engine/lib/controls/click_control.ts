@@ -28,7 +28,7 @@ export class ClickControl extends Control {
     );
     const ray = Ray.fromCamera([normalizedX, normalizedY], this.camera);
 
-    this.scene.traverseNodeTree((node) => {
+    this.scene.traverseTree((node) => {
       if (ray.isIntersect(node)) {
         this.onClick(node.parent!, e);
       }

@@ -13,4 +13,32 @@ export abstract class Node3D extends Node {
       });
     }
   }
+
+  rotateZ(rad: number) {
+    mat4.rotateZ(this.transform, this.transform, rad);
+    if (this.children) {
+      this.children.forEach((node) => {
+        if (!(node instanceof Node3D)) return;
+        node.rotateZ(rad);
+      });
+    }
+  }
+  rotateX(rad: number) {
+    mat4.rotateX(this.transform, this.transform, rad);
+    if (this.children) {
+      this.children.forEach((node) => {
+        if (!(node instanceof Node3D)) return;
+        node.rotateX(rad);
+      });
+    }
+  }
+  rotateY(rad: number) {
+    mat4.rotateY(this.transform, this.transform, rad);
+    if (this.children) {
+      this.children.forEach((node) => {
+        if (!(node instanceof Node3D)) return;
+        node.rotateY(rad);
+      });
+    }
+  }
 }
