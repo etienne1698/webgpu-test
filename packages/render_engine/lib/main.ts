@@ -15,7 +15,7 @@ import { ClickControl } from "./controls/click_control";
 import { KeyboardKeyHoldControl } from "./controls/keyboard_key_hold_control";
 import { SlideNodeControl } from "./controls/slide_node_control";
 
-import { randomVec4RGBAColor } from "./helpers/vec4_colots";
+import { randomVec4RGBAColor } from "./helpers/colors";
 
 import { Webgpu3DRenderer } from "./renderers/webgpu3D_renderer";
 

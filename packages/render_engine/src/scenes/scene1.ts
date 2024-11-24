@@ -5,6 +5,7 @@ import {
   Scene,
   SlideNodeControl,
   Mesh,
+  randomVec4RGBAColor,
 } from "../../lib/main";
 import { MenuControl } from "../controls/menu_control";
 import { generateRandomCubes } from "../utils";
@@ -20,7 +21,12 @@ const scene1 = new Scene(
       "contol-1",
       new ClickControl((node) => {
         if (!(node instanceof Mesh)) return;
-        node.material.isVisible = !node.material.isVisible;
+        node.material.texture.data = new Uint8Array([
+          ...randomVec4RGBAColor(),
+          ...randomVec4RGBAColor(),
+          ...randomVec4RGBAColor(),
+          ...randomVec4RGBAColor(),
+        ]);
       }),
     ],
     ["contol-2", new SlideNodeControl((node) => {})],
