@@ -3,6 +3,8 @@ import { Geometry } from "../models/geometry";
 
 /**
  * TODO: this do not parse all .obj values (ex: normal map no parsed)
+ * TODO: this do not work with "o", "g", "usemtl" et "mtllib" params
+ * TODO: do not read and parse the corresponding .mlt file
  */
 export namespace ObjParser {
   export function parse(obj: string): Geometry {

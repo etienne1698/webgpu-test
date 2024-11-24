@@ -199,24 +199,53 @@ export class Webgpu3DRenderer extends Renderer {
         usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
       });
 
-      const texture = this.device.createTexture({
-        label: "node texture",
-        size: [node.material.texture.width, node.material.texture.height],
-        format: "rgba8unorm",
-        usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST,
-      });
+      let texture!: GPUTexture;
 
       const sampler = this.device.createSampler({});
 
-      this.device.queue.writeTexture(
-        { texture },
-        node.material.texture.data,
-        { bytesPerRow: node.material.texture.width * 4 },
-        {
-          width: node.material.texture.width,
-          height: node.material.texture.height,
-        }
-      );
+      if (
+        node.material.texture.data &&
+        node.material.texture.width &&
+        node.material.texture.height
+      ) {
+        texture = this.device.createTexture({
+          label: "node texture",
+          size: [node.material.texture.width, node.material.texture.height],
+          format: "rgba8unorm",
+          usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST,
+        });
+
+        this.device.queue.writeTexture(
+          { texture },
+          node.material.texture.data,
+          { bytesPerRow: node.material.texture.width * 4 },
+          {
+            width: node.material.texture.width,
+            height: node.material.texture.height,
+          }
+        );
+      } else if (node.material.texture.imageBitmap) {
+        texture = this.device.createTexture({
+          label: "",
+          format: "rgba8unorm",
+          size: [
+            node.material.texture.imageBitmap.width,
+            node.material.texture.imageBitmap.height,
+          ],
+          usage:
+            GPUTextureUsage.TEXTURE_BINDING |
+            GPUTextureUsage.COPY_DST |
+            GPUTextureUsage.RENDER_ATTACHMENT,
+        });
+        this.device.queue.copyExternalImageToTexture(
+          { source: node.material.texture.imageBitmap, flipY: true },
+          { texture },
+          {
+            width: node.material.texture.imageBitmap.width,
+            height: node.material.texture.imageBitmap.height,
+          }
+        );
+      }
 
       pass.setBindGroup(
         0,

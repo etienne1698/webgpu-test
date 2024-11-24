@@ -25,6 +25,7 @@ export function generateRandomCubes(
       geometry: new CubeGeometry(),
       material: new BasicMaterial({
         texture: new Texture(
+          undefined,
           new Uint8Array([
             ...randomVec4RGBAColor(),
             ...randomVec4RGBAColor(),

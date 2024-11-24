@@ -3,6 +3,8 @@ import { Node } from "../models/node";
 import { Scene } from "../models/scene";
 import { Camera } from "../models/camera";
 import { Ray } from "../models/ray";
+import { vec3 } from "gl-matrix";
+import { Mesh } from "../main";
 
 type ClickControlAction = (node: Node, event: MouseEvent) => void;
 
@@ -27,12 +29,26 @@ export class ClickControl extends Control {
       1
     );
     const ray = Ray.fromCamera([normalizedX, normalizedY], this.camera);
+    const intersectedNodes: { node: Node; distance: number }[] = [];
 
     this.scene.traverseTree((node) => {
       if (ray.isIntersect(node)) {
-        this.onClick(node.parent!, e);
+        if (!(node.parent instanceof Mesh)) return;
+        const distance = vec3.distance(
+          this.camera.getPosition(),
+          vec3.transformMat4(vec3.create(), [0, 0, 0], node.parent.transform)
+        );
+
+        intersectedNodes.push({ node: node.parent, distance });
       }
     });
+    if (intersectedNodes.length > 0) {
+      const closestNode = intersectedNodes.reduce((closest, current) =>
+        current.distance < closest.distance ? current : closest
+      );
+
+      this.onClick(closestNode.node, e);
+    }
   }
 
   connect(scene: Scene, camera: Camera, canvas: HTMLCanvasElement, node: Node) {

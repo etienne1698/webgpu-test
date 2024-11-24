@@ -1,3 +1,8 @@
 export class Texture {
-  constructor(public data: Uint8Array, public width: number, public height: number) {}
+  constructor(
+    public imageBitmap: ImageBitmap | undefined,
+    public data?: Uint8Array,
+    public width?: number,
+    public height?: number
+  ) {}
 }

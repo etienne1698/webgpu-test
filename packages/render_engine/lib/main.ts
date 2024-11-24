@@ -17,6 +17,7 @@ import { SlideNodeControl } from "./controls/slide_node_control";
 import { randomVec4RGBAColor } from "./helpers/colors";
 import { colorsRGBA } from "./helpers/colors";
 import { ObjParser } from "./helpers/obj_parser";
+import { TextureLoader } from "./helpers/texture_loader";
 
 import { Webgpu3DRenderer } from "./renderers/webgpu3D_renderer";
 
@@ -47,4 +48,5 @@ export {
   AABBShape,
   Material,
   BasicMaterial,
+  TextureLoader,
 };

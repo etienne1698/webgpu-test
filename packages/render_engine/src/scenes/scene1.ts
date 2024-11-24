@@ -7,10 +7,11 @@ import {
   Texture,
   ObjParser,
   randomVec4RGBAColor,
+  TextureLoader,
 } from "../../lib/main";
 import { MenuControl } from "../controls/menu_control";
 import { generateRandomCubes } from "../utils";
-import testObjFile from "../assets/low_poly_tree/Lowpoly_tree_sample.obj?raw";
+import lowpolyTreeObjFileString from "../assets/lowpoly_tree.obj?raw";
 import { KeyboardKeyHoldControl } from "../controls/keyboard_key_hold_control";
 
 const menu = document.getElementById("menu")!;
@@ -35,15 +36,20 @@ const scene1 = new Scene([
 
 generateRandomCubes(scene1, 50, { x: 50, y: 50, z: 50 });
 
-const randomTexture = new Texture(new Uint8Array([...randomVec4RGBAColor()]), 1, 1);
-const obj3DGeometry = ObjParser.parse(testObjFile);
+const obj3DGeometry = ObjParser.parse(lowpolyTreeObjFileString);
 
 const obj3D = new Mesh({
   geometry: obj3DGeometry,
-  material: new BasicMaterial({ texture: randomTexture }),
+  material: new BasicMaterial({
+    texture: await TextureLoader.load(
+      "https://next-images.123rf.com/index/_next/image/?url=https://assets-cdn.123rf.com/index/static/assets/top-section-bg.jpeg&w=3840&q=75"
+    ),
+  }),
 });
 
 scene1.add(obj3D);
+
+obj3D.translate([5, 0, 0]);
 setInterval(() => {
   obj3D.rotateY(0.01);
 }, 50);
