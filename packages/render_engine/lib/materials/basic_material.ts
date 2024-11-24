@@ -10,4 +10,8 @@ export class BasicMaterial extends Material {
     super();
     Object.assign(this, options);
   }
+
+  clone(): BasicMaterial {
+    return new BasicMaterial({ texture: this.texture });
+  }
 }

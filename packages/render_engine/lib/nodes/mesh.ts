@@ -7,13 +7,11 @@ export type MeshOptions = {
   geometry: Geometry;
   material: Material;
   transform?: mat4;
-  uvMap?: vec2[]; 
 };
 
 export class Mesh extends Node3D {
   geometry!: Geometry;
   material!: Material;
-  uvMap: vec2[] = [];
 
   constructor(options: MeshOptions) {
     super();

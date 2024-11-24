@@ -1,5 +1,4 @@
 import { Camera } from "./camera";
-import { Control } from "../nodes/control";
 import { Scene } from "./scene";
 import { Renderer } from "./renderer";
 
@@ -8,6 +7,7 @@ export type SimulationOptions = {
   canvas: HTMLCanvasElement;
   loopInterval?: number;
   loop?: (app: Simulation) => void;
+  camera: Camera;
 };
 
 export class Simulation {
@@ -16,7 +16,7 @@ export class Simulation {
   loopInterval?: number;
   loop?: (app: Simulation) => void;
 
-  camera = new Camera();
+  camera!: Camera;
 
   private simulationLoopIntervalID?: number;
 

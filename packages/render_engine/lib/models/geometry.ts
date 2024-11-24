@@ -1,6 +1,6 @@
-import { vec3 } from "gl-matrix";
+import { vec2, vec3 } from "gl-matrix";
 
 export abstract class Geometry {
-  abstract vertices: vec3[];
-  
+  vertices: vec3[] = [];
+  uvMap: vec2[] = [];
 }

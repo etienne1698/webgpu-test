@@ -178,6 +178,7 @@ export class Webgpu3DRenderer extends Renderer {
     scene.traverseNodeTree((node) => {
       if (!(node instanceof Mesh)) return;
       if (!node.material.isVisible) return;
+      if (!node.geometry.vertices) return;
 
       const vertexData: number[] = [];
       let verticesLength = 0;
@@ -185,7 +186,7 @@ export class Webgpu3DRenderer extends Renderer {
       for (const [i, v] of node.geometry.vertices.entries()) {
         verticesLength++;
         vertexData.push(...v);
-        vertexData.push(...node.uvMap![i]);
+        vertexData.push(...node.geometry.uvMap[i]);
       }
       const vertexBuffer = this.device.createBuffer({
         label: "Geometry vertices",
