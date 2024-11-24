@@ -12,10 +12,11 @@ import { Texture } from "./models/texture";
 import { CubeGeometry } from "./geometries/cube_geometry";
 
 import { ClickControl } from "./controls/click_control";
-import { KeyboardKeyHoldControl } from "./controls/keyboard_key_hold_control";
 import { SlideNodeControl } from "./controls/slide_node_control";
 
 import { randomVec4RGBAColor } from "./helpers/colors";
+import { colorsRGBA } from "./helpers/colors";
+import { ObjParser } from "./helpers/obj_parser";
 
 import { Webgpu3DRenderer } from "./renderers/webgpu3D_renderer";
 
@@ -38,8 +39,9 @@ export {
   CubeGeometry,
   ClickControl,
   SlideNodeControl,
-  KeyboardKeyHoldControl,
   randomVec4RGBAColor,
+  colorsRGBA,
+  ObjParser,
   Webgpu3DRenderer,
   Mesh,
   AABBShape,

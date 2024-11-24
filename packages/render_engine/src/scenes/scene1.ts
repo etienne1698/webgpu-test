@@ -1,18 +1,18 @@
-import { ObjGeometryParser } from "../../lib/helpers/obj_geometry_parser";
 import {
   ClickControl,
-  KeyboardKeyHoldControl,
-  Node,
   Scene,
   SlideNodeControl,
   Mesh,
-  randomVec4RGBAColor,
   BasicMaterial,
   Texture,
+  colorsRGBA,
+  ObjParser,
+  randomVec4RGBAColor,
 } from "../../lib/main";
 import { MenuControl } from "../controls/menu_control";
 import { generateRandomCubes } from "../utils";
 import testObjFile from "../assets/low_poly_tree/Lowpoly_tree_sample.obj?raw";
+import { KeyboardKeyHoldControl } from "../controls/keyboard_key_hold_control";
 
 const menu = document.getElementById("menu")!;
 const btnForward: HTMLButtonElement = menu.getElementsByTagName("button")[0]!;
@@ -30,20 +30,14 @@ const scene1 = new Scene([
     goBackward: btnBackward,
     rotateY: inputRotationY,
   }),
-  
-  new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING)
-]);
 
-console.error(scene1)
+  new KeyboardKeyHoldControl(KeyboardKeyHoldControl.DEFAULT_KEY_BINDING),
+]);
 
 generateRandomCubes(scene1, 50, { x: 50, y: 50, z: 50 });
 
-const randomTexture = new Texture(
-  new Uint8Array([...randomVec4RGBAColor()]),
-  1,
-  1
-);
-const obj3DGeometry = ObjGeometryParser.parse(testObjFile);
+const randomTexture = new Texture(new Uint8Array([...randomVec4RGBAColor()]), 1, 1);
+const obj3DGeometry = ObjParser.parse(testObjFile);
 
 const obj3D = new Mesh({
   geometry: obj3DGeometry,

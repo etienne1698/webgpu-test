@@ -15,7 +15,6 @@ export function generateRandomCubes(
   N: number,
   bounds: { x: number; y: number; z: number }
 ) {
-  const node0 = new Node();
   for (let i = 0; i < N; i++) {
     const position: vec3 = [
       Math.random() * bounds.x - bounds.x / 2, // Position X aléatoire
@@ -39,7 +38,6 @@ export function generateRandomCubes(
       transform: mat4.translate(mat4.create(), mat4.create(), position),
     });
     node.add(new AABBShape());
-    node0.add(node);
+    scene.add(node);
   }
-  scene.add(node0);
 }

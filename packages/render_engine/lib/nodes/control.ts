@@ -12,7 +12,7 @@ export abstract class Control extends Node {
     super();
   }
 
-  add() {
+  override add() {
     throw new Error("cannot add child to controls");
   }
 

@@ -1,9 +1,9 @@
 import Mousetrap from "mousetrap";
-import { Camera } from "../models/camera";
-import { Control } from "../nodes/control";
-import { Scene } from "../models/scene";
-import { degeesToRadiant } from "../helpers/math";
-import { Node } from "../main";
+import { Camera } from "../../lib/models/camera";
+import { Control } from "../../lib/nodes/control";
+import { Scene } from "../../lib/models/scene";
+import { degeesToRadiant } from "../../lib/helpers/math";
+import { Node } from "../../lib/main";
 
 type KeyBinding = {
   [key: string]: (scene: Scene, camera: Camera) => void;
