@@ -25,7 +25,7 @@ export class Ray {
     const normalizedY = -(((y - canvasRect.top) / canvasRect.height) * 2 - 1); */
 
     // Convertir en espace de vue
-    const inverseProjectionView = camera.viewProjectionMatrix;
+    const inverseProjectionView = new Float32Array(camera.viewProjectionMatrix);
     mat4.invert(inverseProjectionView, inverseProjectionView);
 
     const nearPoint = vec4.fromValues(normalizedX, normalizedY, -1.0, 1.0);

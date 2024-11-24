@@ -26,7 +26,7 @@ export class Camera {
       mat4.invert(mat4.create(), this.view)
     );
 
-    //this.frustum.extractPlanes(this.viewProjectionMatrix);
+    this.frustum.extractPlanes(this.viewProjectionMatrix);
   }
 
   setPerspectiveAspectRatio(aspectRatio: number) {

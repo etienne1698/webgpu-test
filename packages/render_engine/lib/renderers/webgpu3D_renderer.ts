@@ -180,12 +180,14 @@ export class Webgpu3DRenderer extends Renderer {
       if (!node.material.isVisible) return;
       if (!node.geometry.vertices) return;
 
-      /* const boundingSphere = node.geometry.computeBoundingSphere();
+      const boundingSphere = node.geometry.getTransformedBoundingSphere(node.transform)
+      
       if (
         !camera.frustum.isSphereIn(boundingSphere.center, boundingSphere.radius)
       ) {
         return;
-      } */
+      }
+
 
       //console.error("rendered node");
 
