@@ -4,9 +4,7 @@ import {
   SlideNodeControl,
   Mesh,
   BasicMaterial,
-  Texture,
   ObjParser,
-  randomVec4RGBAColor,
   TextureLoader,
 } from "../../lib/main";
 import { MenuControl } from "../controls/menu_control";
@@ -49,7 +47,7 @@ const obj3D = new Mesh({
 
 scene1.add(obj3D);
 
-obj3D.translate([5, 0, 0]);
+obj3D.translate([5, 0, -75]);
 setInterval(() => {
   obj3D.rotateY(0.01);
 }, 50);

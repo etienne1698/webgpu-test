@@ -1,9 +1,12 @@
 import { mat4, vec3 } from "gl-matrix";
 import { degeesToRadiant } from "../helpers/math";
+import { Frustum } from "./frustum";
 
 export class Camera {
   view: mat4 = mat4.create();
   projection: mat4 = mat4.create();
+  frustum!: Frustum;
+  viewProjectionMatrix: mat4 = mat4.create();
 
   constructor() {
     this.projection = mat4.perspective(
@@ -13,6 +16,17 @@ export class Camera {
       0.1,
       1000
     );
+    this.frustum = new Frustum(this.viewProjectionMatrix);
+  }
+
+  protected updateFrustum() {
+    mat4.multiply(
+      this.viewProjectionMatrix,
+      this.projection,
+      mat4.invert(mat4.create(), this.view)
+    );
+
+    //this.frustum.extractPlanes(this.viewProjectionMatrix);
   }
 
   setPerspectiveAspectRatio(aspectRatio: number) {
@@ -27,6 +41,7 @@ export class Camera {
 
   translate(v: vec3) {
     mat4.translate(this.view, this.view, v);
+    this.updateFrustum();
   }
 
   getDirection(): vec3 {
@@ -50,25 +65,21 @@ export class Camera {
 
   setRotationY(rad: number) {
     this.rotateY(rad);
+    this.updateFrustum();
   }
 
   rotateX(rad: number) {
     mat4.rotateX(this.view, this.view, rad);
+    this.updateFrustum();
   }
 
   rotateY(rad: number) {
     mat4.rotateY(this.view, this.view, rad);
+    this.updateFrustum();
   }
 
   rotateZ(rad: number) {
     mat4.rotateZ(this.view, this.view, rad);
-  }
-
-  get viewProjectionMatrix() {
-    return mat4.multiply(
-      mat4.create(),
-      this.projection,
-      mat4.invert(mat4.create(), this.view)
-    );
+    this.updateFrustum();
   }
 }

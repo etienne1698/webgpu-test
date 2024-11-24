@@ -17,8 +17,10 @@ const app = new Simulation(renderer, {
 
 await app.init();
 
-camera.translate([0, 15, 100]);
+camera.translate([0, 15, 10]);
+
 app.run();
+//renderer.render(scene1, camera);
 
 // Prevent browser zoom
 document.addEventListener(
