@@ -20,6 +20,9 @@ export class Simulation {
 
   private simulationLoopIntervalID?: number;
 
+  private oldRenderTimestamps = 0;
+  currentFPS = 0;
+
   constructor(private renderer: Renderer, options: SimulationOptions) {
     Object.assign(this, options);
   }
@@ -36,6 +39,11 @@ export class Simulation {
   }
 
   startRenderLoop() {
+    const secondsSinceLastRender =
+      (performance.now() - this.oldRenderTimestamps) / 1000;
+    this.currentFPS = 2 / secondsSinceLastRender;
+    this.oldRenderTimestamps = performance.now();
+    
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.startRenderLoop.bind(this));
   }
